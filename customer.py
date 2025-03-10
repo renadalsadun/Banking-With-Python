@@ -28,6 +28,21 @@ def reading_from_file(file_name):
         return [dict.fromkeys(header, '')]
 
     
+def write_to_file(file_name, customer):
+    """Appends a new customer's data to the CSV file without removing previous data."""
+    try:
+        with open(f"{file_name}.csv", mode="a", newline="") as file_writer:
+            writer = csv.writer(file_writer, delimiter=";")
+            writer.writerow([
+                customer.account_id,
+                customer.first_name,
+                customer.last_name,
+                customer.password,
+                customer.balance_checking,
+                customer.balance_savings
+            ])
+    except Exception as e:
+        print(f"Error writing to file: {e}")
 
 
 ############################################### END OF READING FILE
@@ -87,16 +102,7 @@ class Customer():
 
         # add to all customers list 
         cls.all_customers.append(new_customer) 
-        with open("data.csv", mode="a", newline="") as file_writer:
-            writer = csv.writer(file_writer, delimiter=";")
-            writer.writerow([
-                new_customer.account_id,
-                new_customer.first_name,
-                new_customer.last_name,
-                new_customer.password,
-                new_customer.balance_checking,
-                new_customer.balance_savings
-            ])       
+        write_to_file("data", new_customer)
         print("Customer added successfully!\nCustomer details: ", new_customer)
         return new_customer
 
