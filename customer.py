@@ -57,7 +57,7 @@ class Customer():
         self.last_name = last_name
         self.password = password
         self.balance_checking = float(balance_checking) if balance_checking is not None else 0.0
-        self.balance_savings = float(balance_savings) if balance_checking is not None else 0.0
+        self.balance_savings = float(balance_savings) if balance_savings is not None else 0.0
 
     @classmethod
     def find_costumer( cls , account_id ):

@@ -38,6 +38,7 @@ class Test_Customer(unittest.TestCase):
 #   - confirms that calling add_new_customer() without optional parameters doesn't break functionality
 #   - increments next_account_id 
 #   - successfully adds a customer with default balance values if not provided
+#   - succseefully adds a customer if only balance checking or only balance saving is provided
 
 
     def test_add_new_customer(self):
@@ -55,6 +56,13 @@ class Test_Customer(unittest.TestCase):
         customer_default = Customer.add_new_customer('default', 'user', 'password')
         self.assertEqual(customer_default.balance_checking, 0.0)
         self.assertEqual(customer_default.balance_savings, 0.0)
+        customer_only_checking_account = Customer.add_new_customer('name', 'name2', 'password',   90)
+        self.assertEqual(customer_only_checking_account.balance_checking, 90.0)
+        self.assertEqual(customer_only_checking_account.balance_savings, 0.0)
+
+        customer_only_saving_account = Customer.add_new_customer('name', 'name2', 'password',balance_savings = 90)
+        self.assertEqual(customer_only_saving_account.balance_checking, 0.0)
+        self.assertEqual(customer_only_saving_account.balance_savings, 90.0)
 
 
 
