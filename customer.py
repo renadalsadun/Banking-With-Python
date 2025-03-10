@@ -43,7 +43,9 @@ class Customer():
 
     def __init__(self, first_name, last_name, password , balance_checking = None , balance_savings = None, account_id = None ):
         
-        #if condition becausee existing customers - i.e. data- have id's but future customers do not 
+        #if condition becausee existing customers - i.e. data- have id's but future 
+        #customers -i.e. cashier made customers- do not have id's and will have the generated id instead
+        
         if account_id:
             self.account_id = int(account_id)
             
@@ -54,8 +56,8 @@ class Customer():
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
-        self.balance_checking = float(balance_checking)
-        self.balance_savings = float(balance_savings)
+        self.balance_checking = float(balance_checking) if balance_checking is not None else 0.0
+        self.balance_savings = float(balance_savings) if balance_checking is not None else 0.0
 
     @classmethod
     def find_costumer( cls , account_id ):
@@ -72,10 +74,19 @@ class Customer():
 
     @classmethod
     def add_new_customer(cls, first_name, last_name, password , balance_checking = None , balance_savings = None , account_id = None  ):
+        
+        if not first_name or not last_name or not password:
+            print("Error: First Name, Last Name, and Password cannot be empty")
+            return None
 
-        new_customer = Customer(first_name, last_name, password, balance_checking, balance_savings , account_id )
+        try:
+            new_customer = Customer(first_name, last_name, password, balance_checking, balance_savings , account_id )
+        except Exception as e:
+            print(f"Error creating customer: {e}")
+            return None
 
         # add to all customers list 
+        print("Customer added successfully!\nCustomer details: ", new_customer)
         cls.all_customers.append(new_customer)
         return new_customer
 
@@ -106,7 +117,7 @@ if __name__ == "__main__":
 
 
     # debugging
-    Customer.add_new_customer('renad', 'alsadun', 'password', '0292.2', '0.0' )
+    Customer.add_new_customer('renad', 'alsadun', 'password', '0292.2', 0.0 )
 
     for customer in Customer.all_customers:
         print(customer)
