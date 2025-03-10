@@ -90,7 +90,7 @@ class Customer():
 ############################################### END OF CUSTOMER CLASS
 
 if __name__ == "__main__":
-    existing_customers = reading_from_file("daata")
+    existing_customers = reading_from_file("data")
 
 # adding the customers in data.csv file to the Customer class!!    
     if existing_customers[0]['account_id'] != '':
