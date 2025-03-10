@@ -27,6 +27,8 @@ class Test_Customer(unittest.TestCase):
 
     def test_add_new_customer(self):
         Customer.add_new_customer('fname', 'lastname', 'password', 100 , 90)
+        print(Customer.get_number_of_customers)
+        self.assertEqual(Customer.get_number_of_customers, 1)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

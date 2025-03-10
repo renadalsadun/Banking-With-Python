@@ -62,9 +62,11 @@ class Customer():
             
         return None # if the customer id is not valid, return none ;;
 
-    def get_number_of_customers():
-        return len(Customer.all_customers)
-    
+
+    @classmethod
+    def get_number_of_customers(cls):
+        return len(cls.all_customers)
+
 
     def __str__ (self):
         return f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}'
