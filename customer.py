@@ -86,8 +86,18 @@ class Customer():
             return None
 
         # add to all customers list 
+        cls.all_customers.append(new_customer) 
+        with open("data.csv", mode="a", newline="") as file_writer:
+            writer = csv.writer(file_writer, delimiter=";")
+            writer.writerow([
+                new_customer.account_id,
+                new_customer.first_name,
+                new_customer.last_name,
+                new_customer.password,
+                new_customer.balance_checking,
+                new_customer.balance_savings
+            ])       
         print("Customer added successfully!\nCustomer details: ", new_customer)
-        cls.all_customers.append(new_customer)
         return new_customer
 
 
