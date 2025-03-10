@@ -23,3 +23,6 @@ class Account():
     def overdraft(cls):
         pass
 
+    @classmethod 
+    def is_active(cls):
+        pass
