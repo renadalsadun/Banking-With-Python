@@ -3,14 +3,23 @@ class Account():
     def __init__(self):
         pass
 
-    def withdraw_from_savings(self, amount):
+    @classmethod
+    def check_balance(cls):
         pass
 
-    def withdraw_from_checking(self, amount):
+    @classmethod
+    def withdraw_from_savings( cls, customer, amount ):
         pass
 
-    def transfer(self, amount, target_account_id, target_account):
+    @classmethod
+    def withdraw_from_checking( cls , customer , amount ):
         pass
-    
-    def check_balance(self):
+
+    @classmethod
+    def transfer( cls, amount, customer, target_account_id , target_account ):
         pass
+
+    @classmethod
+    def overdraft(cls):
+        pass
+

@@ -85,5 +85,13 @@ class Test_Customer(unittest.TestCase):
         self.assertIsNone(invalid_customer_2)
 
 
+
+
+
+#####################################################################################
+#                            ACCOUNT CLASS TESTS                                    #
+##################################################################################### 
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
