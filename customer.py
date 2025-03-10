@@ -62,33 +62,40 @@ class Customer():
             
         return None # if the customer id is not valid, return none ;;
 
+    def get_number_of_customers():
+        return len(Customer.all_customers)
+    
 
     def __str__ (self):
         return f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}'
 
-# adding the customers in data.csv file to the Customer class!!    
-existing_customers = reading_from_file('data')
-for existing_customer in existing_customers:
-    Customer.add_new_customer(
-        existing_customer['first_name'],
-        existing_customer['last_name'],
-        existing_customer['password'],
-        existing_customer['balance_checking'],
-        existing_customer['balance_savings'],
-        existing_customer['account_id']
-
-    )
 
 
 ############################################### END OF CUSTOMER CLASS
 
-#debugging 
-for customer in Customer.all_customers:
+if __name__ == "__main__":
+    existing_customers = reading_from_file("data")
 
-    print(customer)
+# adding the customers in data.csv file to the Customer class!!    
 
-print(Customer.next_account_id)
-# Customer.add_new_customer('renad', 'alsadun', )
-#end of debugging
+    for existing_customer in existing_customers:
+        Customer.add_new_customer(
+            existing_customer["first_name"],
+            existing_customer["last_name"],
+            existing_customer["password"],
+            existing_customer["balance_checking"],
+            existing_customer["balance_savings"],
+            existing_customer["account_id"],
+        )
+
+
+    # debugging
+    Customer.add_new_customer('renad', 'alsadun', 'password', '0292.2', '0.0' )
+
+    for customer in Customer.all_customers:
+        print(customer)
+
+    print(Customer.next_account_id)
+    #end of debugging
 
 
