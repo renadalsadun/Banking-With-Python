@@ -46,16 +46,8 @@ class Customer():
         self.balance_checking = float(balance_checking)
         self.balance_savings = float(balance_savings)
 
-
-
-    def add_new_customer(first_name, last_name, password , balance_checking = None , balance_savings = None , account_id = None  ):
-
-        new_customer = Customer(first_name, last_name, password, balance_checking, balance_savings , account_id )
-
-        # add to all customers list 
-        Customer.all_customers.append(new_customer) 
-
-    def find_costumer( self , account_id ):
+    @classmethod
+    def find_costumer( cls , account_id ):
         for customer in Customer.all_customers:
             if customer.account_id == account_id:
                 return customer
@@ -66,6 +58,17 @@ class Customer():
     @classmethod
     def get_number_of_customers(cls):
         return len(cls.all_customers)
+
+    @classmethod
+    def add_new_customer(cls, first_name, last_name, password , balance_checking = None , balance_savings = None , account_id = None  ):
+
+        new_customer = Customer(first_name, last_name, password, balance_checking, balance_savings , account_id )
+
+        # add to all customers list 
+        cls.all_customers.append(new_customer)
+        return new_customer
+
+
 
 
     def __str__ (self):
