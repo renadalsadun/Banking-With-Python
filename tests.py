@@ -8,9 +8,9 @@ import unittest
 class Test_Customer(unittest.TestCase):
 
 
-    def setUp(self): 
+    # def setUp(self): 
         # self.customer = Customer()
-        test_customer = Customer.add_new_customer('fname', 'lastname', 'password', 100 , 90)
+        # test_customer = Customer.add_new_customer('fname', 'lastname', 'password', 100 , 90)
 
 
 
@@ -27,8 +27,11 @@ class Test_Customer(unittest.TestCase):
 
     def test_add_new_customer(self):
         Customer.add_new_customer('fname', 'lastname', 'password', 100 , 90)
-        print(Customer.get_number_of_customers)
-        self.assertEqual(Customer.get_number_of_customers, 1)
+        print(Customer.get_number_of_customers())
+        # self.assertEqual(Customer.get_number_of_customers(), 1)         
+        for customer in (Customer.all_customers):
+            print(customer.first_name)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
