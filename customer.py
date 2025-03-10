@@ -21,10 +21,11 @@ def reading_from_file(file_name):
     
     except FileNotFoundError:
         print(f"Error: File '{file_name}.csv' was not found")
-        return []
+        return [dict.fromkeys(header, '')]
+
     except csv.Error:
         print(f"Error: Could not read the CSV file '{file_name}.csv")
-        return []
+        return [dict.fromkeys(header, '')]
 
     
 
@@ -89,19 +90,19 @@ class Customer():
 ############################################### END OF CUSTOMER CLASS
 
 if __name__ == "__main__":
-    existing_customers = reading_from_file("data")
+    existing_customers = reading_from_file("daata")
 
 # adding the customers in data.csv file to the Customer class!!    
-
-    for existing_customer in existing_customers:
-        Customer.add_new_customer(
-            existing_customer["first_name"],
-            existing_customer["last_name"],
-            existing_customer["password"],
-            existing_customer["balance_checking"],
-            existing_customer["balance_savings"],
-            existing_customer["account_id"],
-        )
+    if existing_customers[0]['account_id'] != '':
+        for existing_customer in existing_customers:
+            Customer.add_new_customer(
+                existing_customer["first_name"],
+                existing_customer["last_name"],
+                existing_customer["password"],
+                existing_customer["balance_checking"],
+                existing_customer["balance_savings"],
+                existing_customer["account_id"],
+            )
 
 
     # debugging
