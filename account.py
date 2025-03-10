@@ -12,5 +12,5 @@ class Account():
     def transfer(self, amount, target_account_id, target_account):
         pass
     
-    def check_balance():
+    def check_balance(self):
         pass
