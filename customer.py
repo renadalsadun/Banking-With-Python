@@ -117,12 +117,12 @@ if __name__ == "__main__":
 
 
     # debugging
-    Customer.add_new_customer('renad', 'alsadun', 'password', '0292.2', 0.0 )
+    # Customer.add_new_customer('renad', 'alsadun', 'password', '0292.2', 0.0 )
 
-    for customer in Customer.all_customers:
-        print(customer)
+    # for customer in Customer.all_customers:
+    #     print(customer)
 
-    print(Customer.next_account_id)
+    # print(Customer.next_account_id)
     #end of debugging
 
 
