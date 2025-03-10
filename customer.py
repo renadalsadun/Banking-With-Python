@@ -12,11 +12,21 @@ def reading_from_file(file_name):
     '''
     reads the data from file_name file, and compines it in a dictionary with the header
     '''
+    try:
+        with open(f'{file_name}.csv', mode='r') as file_reader:
+            content = csv.reader( file_reader , delimiter = ';' )
+            data = [dict(zip(header, line)) for line in content]
+            return data
 
-    with open(f'{file_name}.csv', mode='r') as file_reader:
-        content = csv.reader( file_reader , delimiter = ';' )
-        data = [dict(zip(header, line)) for line in content]
-        return data
+    
+    except FileNotFoundError:
+        print(f"Error: File '{file_name}.csv' was not found")
+        return []
+    except csv.Error:
+        print(f"Error: Could not read the CSV file '{file_name}.csv")
+        return []
+
+    
 
 
 ############################################### END OF READING FILE

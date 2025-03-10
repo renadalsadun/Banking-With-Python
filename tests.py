@@ -27,6 +27,7 @@ class Test_Customer(unittest.TestCase):
 # add_new_customer() Method Testing:
 #   - successfully adds a new customer to the all_customers list
 #   - successfully assign the newly added customer's attributes (first name, last name, password, checking balance, saving balance)
+#   - successfully assign a unique account id
 
 
     def test_add_new_customer(self):
