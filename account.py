@@ -154,30 +154,94 @@ class Account():
 
     def transfer( self, amount, account, target_account_id ):
 
-        target_customer = Customer.find_costumer(target_account_id)
+        target_customer = Customer.find_customer(target_account_id)
 
         #if the customer was found
         if target_customer:
 
-            #transfering between accounts of the same customer
+        # CASE 1: transfering between accounts of the same customer
             if target_account_id == self.customer.account_id: 
-                if account == 'checking':
-                    pass
-                elif account == 'saving':
-                    pass
-                else:
-                    print (f'account ({account}) not correct, enter either checking or saving!')
-            else:
-                if account == 'checking':
-                    pass
-                elif account == 'saving':
-                    pass
-                else:
-                    print (f'account ({account}) not correct, enter either checking or saving!')
 
-        #if the customer was not found
+                #  CHECKING -> SAVING
+                if account.lower() == 'checking':
+                    
+                    #to determine if the withdrawal waas successfully made 
+                    old_checking = self.checking_balance
+                    self.withdraw_from_checking(amount)
+
+                    #if the withdrawal failed
+                    if old_checking == self.checking_balance:
+                        print("Transfer failed! ")
+
+                    # if the withdrawal was successful
+                    else:
+                        self.deposite('saving', amount)
+                        print("Transfer from checking to savings was successful!")
+
+
+                # SAVING -> CHECKING
+                elif account.lower() == 'saving':
+                                        
+                    #to determine if the withdrawal waas successfully made 
+                    old_saving = self.saving_balance
+                    self.withdraw_from_savings(amount)
+
+                    #if the withdrawal failed
+                    if old_saving == self.saving_balance:
+                        print("Transfer failed! ")
+
+                    # if the withdrawal was successful
+                    else:
+                        self.deposite('checking', amount)
+                        print("Transfer from saving to checking was successful!")
+
+
+                else:
+                    print (f'Account ({account}) is not correct, enter either checking or saving!')
+
+        # CASE 2: transfering to another customer's account (only to target customer’s checking)       
+            else:
+                target_account = Account(target_customer)
+                if account.lower() == 'checking':
+                    
+                    #to determine if the withdrawal waas successfully made 
+                    old_checking = self.checking_balance
+                    self.withdraw_from_checking(amount)
+
+                    #if the withdrawal failed
+                    if old_checking == self.checking_balance:
+                        print("Transfer failed! ")
+
+                    # if the withdrawal was successful
+                    else:
+                        target_account.deposite('checking', amount)
+                        print(f"Transfer to account {target_account_id} was successful!")
+
+
+
+                elif account.lower() == 'saving':
+                                        
+                    #to determine if the withdrawal waas successfully made 
+                    old_saving = self.saving_balance
+                    self.withdraw_from_savings(amount)
+
+                    #if the withdrawal failed
+                    if old_saving == self.saving_balance:
+                        print("Transfer failed! ")
+
+                    # if the withdrawal was successful
+                    else:
+                        target_account.deposite('checking', amount)
+                        print(f"Transfer to account {target_account_id} was successful!")
+
+
+                
+                else:
+                    print (f'Account ({account}) is not correct, enter either checking or saving!')
+
+    #if the target customer was not found
         else:
-            print (f'account with id number {target_account_id} not found')
+            print (f'Account with id number {target_account_id} was not found')
 
 
 

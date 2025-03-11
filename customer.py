@@ -76,7 +76,7 @@ class Customer():
         self.balance_savings = float(balance_savings) if balance_savings is not None else 0.0
 
     @classmethod
-    def find_costumer( cls , account_id ):
+    def find_customer( cls , account_id ):
         for customer in Customer.all_customers:
             if customer.account_id == account_id:
                 return customer

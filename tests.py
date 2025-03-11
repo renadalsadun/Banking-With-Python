@@ -73,10 +73,10 @@ class Test_Customer(unittest.TestCase):
 
     def test_find_customer(self):
         added_customer = Customer.add_new_customer('Renad', 'Alsadun', 'PASS@WORD', 1000, 500)
-        found_customer = Customer.find_costumer(int(added_customer.account_id))
+        found_customer = Customer.find_customer(int(added_customer.account_id))
         self.assertIsNotNone(found_customer)
         self.assertEqual(found_customer.first_name, 'Renad')
-        self.assertIsNone(Customer.find_costumer(0000))
+        self.assertIsNone(Customer.find_customer(0000))
         
 
         invalid_customer = Customer.add_new_customer('invalid', 'user', 'password', 'string balance!', None)
