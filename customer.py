@@ -76,7 +76,7 @@ class Customer():
         self.balance_savings = float(balance_savings) if balance_savings is not None else 0.0
 
     @classmethod
-    def find_customer( cls , account_id ):
+    def find_customer( cls , account_id ): #fixed costumer to customer 
         for customer in Customer.all_customers:
             if customer.account_id == account_id:
                 return customer
@@ -152,5 +152,6 @@ if __name__ == "__main__":
 
     # print(Customer.next_account_id)
     #end of debugging
+
 
 
