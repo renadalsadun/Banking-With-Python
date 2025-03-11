@@ -87,10 +87,28 @@ class Test_Customer(unittest.TestCase):
 
 
 
-
 #####################################################################################
-#                            ACCOUNT CLASS TESTS                                    #
-##################################################################################### 
+#                                ACCOUNT CLASS TESTS                                #
+#####################################################################################
+
+class Test_Account(unittest.TestCase):
+
+    #def withdraw_from_savings(self, amount):
+    #     pass
+
+    # def withdraw_from_checking(self, amount):
+    #     pass
+
+    # def transfer(self, amount, target_account_id, target_account):
+    #     pass
+    
+    # def check_balance(self):
+    #     pass
+
+
+    # test case: withdraw_from_savings(self, customer, amount)
+    # successfully subtract the amount from the customer's account
+    pass
 
 
 if __name__ == '__main__':
