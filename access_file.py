@@ -1,8 +1,11 @@
 
 import csv
+from datetime import datetime
+
 
 header = [ 'account_id' , 'first_name' , 'last_name' , 'password' , 'balance_checking' , 'balance_savings' ] 
 
+transaction_header = ['timestamp', 'account_id', 'transaction_type', 'amount', 'balance']
 
 content = []
 
@@ -43,6 +46,15 @@ def write_to_file(file_name, customer):
     except Exception as e:
         print(f"Error writing to file: {e}")
 
+def log_transaction(account_id, transaction_type, amount, balance):
+    """ Logs a transaction in the transactions.csv file """
+    try:
+        with open("transactions.csv", mode="a", newline="") as file_writer:
+            writer = csv.writer(file_writer, delimiter=";")
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            writer.writerow([timestamp, account_id, transaction_type, amount, balance])
+    except Exception as e:
+        print(f"Error logging transaction: {e}")
 
 def update_file(file_name, customer):
     pass
