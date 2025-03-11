@@ -137,14 +137,14 @@ class Account():
         if account == 'checking':
             self.checking_balance += amount
             self.update_checking_balance(self.checking_balance)
-            print(f'Deposite successful. New checking balance: ${self.checking_balance}')
+            print(f'Deposite successful! New checking balance: ${self.checking_balance}')
             log_transaction( self.customer.account_id, "deposit from checking", amount, self.customer.balance_checking)
 
 
         elif account == 'saving':
             self.saving_balance += amount
             self.update_saving_balance(self.saving_balance)
-            print(f'Deposite successful. New saving balance: ${self.saving_balance}')
+            print(f'Deposite successful! New saving balance: ${self.saving_balance}')
             log_transaction( self.customer.account_id, "deposit from saving", amount, self.customer.balance_savings)
 
         else:
