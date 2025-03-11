@@ -133,7 +133,7 @@ class Account():
 
 
 
-    def deposite(self, account, amount):
+    def deposit(self, account, amount):
         if account == 'checking':
             self.checking_balance += amount
             self.update_checking_balance(self.checking_balance)
@@ -175,7 +175,7 @@ class Account():
 
                     # if the withdrawal was successful
                     else:
-                        self.deposite('saving', amount)
+                        self.deposit('saving', amount)
                         print("Transfer from checking to savings was successful!")
 
 
@@ -192,7 +192,7 @@ class Account():
 
                     # if the withdrawal was successful
                     else:
-                        self.deposite('checking', amount)
+                        self.deposit('checking', amount)
                         print("Transfer from saving to checking was successful!")
 
 
@@ -214,7 +214,7 @@ class Account():
 
                     # if the withdrawal was successful
                     else:
-                        target_account.deposite('checking', amount)
+                        target_account.deposit('checking', amount)
                         print(f"Transfer to account {target_account_id} was successful!")
 
 
@@ -231,7 +231,7 @@ class Account():
 
                     # if the withdrawal was successful
                     else:
-                        target_account.deposite('checking', amount)
+                        target_account.deposit('checking', amount)
                         print(f"Transfer to account {target_account_id} was successful!")
 
 
