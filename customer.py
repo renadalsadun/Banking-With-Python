@@ -1,4 +1,5 @@
-import csv 
+import csv
+# from access_file import * 
 	
 ############################################### READING FILE
 
@@ -29,7 +30,7 @@ def reading_from_file(file_name):
 
     
 def write_to_file(file_name, customer):
-    """Appends a new customer's data to the CSV file without removing previous data."""
+    """Appends a new customer's data to the CSV file without removing previous data"""
     try:
         with open(f"{file_name}.csv", mode="a", newline="") as file_writer:
             writer = csv.writer(file_writer, delimiter=";")
@@ -49,7 +50,7 @@ def write_to_file(file_name, customer):
 
 
 
-###############################################  CUSTOMER CLASS
+############################################### CUSTOMER CLASS
 
 class Customer():
 
@@ -139,7 +140,7 @@ if __name__ == "__main__":
                 existing_customer["password"],
                 existing_customer["balance_checking"],
                 existing_customer["balance_savings"],
-                existing_customer["account_id"],
+                existing_customer["account_id"]
             )
 
 

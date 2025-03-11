@@ -31,7 +31,7 @@ class Account():
         
         '''
 
-        if self.is_active( self):
+        if self.is_active():
 
             if balance - amount - 35 >= -100:
                 return True
