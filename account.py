@@ -155,32 +155,29 @@ class Account():
     def transfer( self, amount, account, target_account_id ):
 
         target_customer = Customer.find_costumer(target_account_id)
+
+        #if the customer was found
         if target_customer:
 
-            #transfering between accounts of the same user
+            #transfering between accounts of the same customer
             if target_account_id == self.customer.account_id: 
+                if account == 'checking':
+                    pass
+                elif account == 'saving':
+                    pass
+                else:
+                    print (f'account ({account}) not correct, enter either checking or saving!')
+            else:
+                if account == 'checking':
+                    pass
+                elif account == 'saving':
+                    pass
+                else:
+                    print (f'account ({account}) not correct, enter either checking or saving!')
 
+        #if the customer was not found
         else:
             print (f'account with id number {target_account_id} not found')
-        # if account == 'checking':
-        #     self.withdraw_from_checking(amount)
-        #     if targer_customer:
-        #         target_account = Account(targer_customer)
-        #         target_account.deposite(amount)
-        #     else:
-        #         print('target not found')
-
-        #     self.customer.set_checking_balance(self.checking_balance + amount)
-        #     self.update_checking_balance(self.checking_balance)
-        #     print(f'Deposite successful. New checking balance: ${self.checking_balance}')
-
-        # elif account == 'saving':
-        #     self.customer.set_saving_balance(self.saving_balance + amount)
-        #     self.update_saving_balance(self.saving_balance)
-        #     print(f'Deposite successful. New saving balance: ${self.saving_balance}')
-
-        # else:
-        #     print('wrong account, deposite not successful')
 
 
 
