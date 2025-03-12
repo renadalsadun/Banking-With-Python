@@ -2,10 +2,14 @@
 from customer import Customer
 from account import Account
 
+class Bank():
 
-cashier_input = ""
+    cashier_input = ""
 
-while True:
-    print("Welcome to BANKING WITH PYTHON Bank\nWhat are you up to?")
-    
-    
+    def start_bank(self):
+
+        while self.cashier_input.lower() != 'quit':
+            print("Welcome to pyBank\nWhat are you up to?")
+
+        
+        

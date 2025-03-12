@@ -29,7 +29,10 @@ class Customer():
         self.balance_savings = float(balance_savings) if balance_savings is not None else 0.0
 
     @classmethod
-    def find_customer( cls , account_id ): #fixed costumer to customer 
+    def find_customer( cls , account_id ): 
+        '''
+        retuns customer object is customer exists, otherwise returns none
+        '''
         for customer in Customer.all_customers:
             if customer.account_id == account_id:
                 return customer
@@ -39,11 +42,18 @@ class Customer():
 
     @classmethod
     def get_number_of_customers(cls):
+        '''
+        returns the total number of customers
+        '''
         return len(cls.all_customers)
 
     @classmethod
     def add_new_customer(cls, first_name, last_name, password , balance_checking = None , balance_savings = None , account_id = None  ):
-        
+        '''
+        creates a new customer, if first/last name or password were not provided returns none
+        if the customer is created, appends it to customer list, and the database -bank.csv file-
+        '''
+
         if not first_name or not last_name or not password:
             print("Error: First Name, Last Name, and Password cannot be empty")
             return None
@@ -61,15 +71,29 @@ class Customer():
         return new_customer
 
     def set_checking_balance( self , new_balance ):
+        '''
+        setter for checking balance
+        '''
         self.balance_checking = new_balance
 
     def set_savings_balance( self , new_balance ):
+        '''
+        setter for savings balance
+        '''
+
         self.balance_savings = new_balance
 
     def get_checking_balance( self ):
+        '''
+        getter for checking balance
+        '''
+
         return self.balance_checking 
 
     def get_savings_balance( self ):
+        '''
+        getter for savings balance
+        '''
         return self.balance_savings
 
 
