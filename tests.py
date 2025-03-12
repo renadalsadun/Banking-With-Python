@@ -150,5 +150,43 @@ class Test_Account(unittest.TestCase):
         self.assertTrue(self.account_1.check_balance(self.account_1.checking_balance, 40))
 
 
+# Test for update_checking_balance() Method:
+
+#   - updates the checking balance when a new value is passed
+#   - updates the checking balance even when the new balance is 0.0
+#   - updates the checking balance with a negative value
+
+    def test_update_checking_balance(self):
+
+        self.account_1.update_checking_balance(100)
+        self.assertEqual(self.customer_1.balance_checking, 100)
+
+        self.account_1.update_checking_balance(0.0)
+        self.assertEqual(self.customer_1.balance_checking, 0.0)
+
+        self.account_1.update_checking_balance(-100)
+        self.assertEqual(self.customer_1.balance_checking, -100)
+
+# Test for update_savings_balance() Method:
+
+#   - updates the savings balance when a new value is passed
+#   - updates the savings balance even when the new balance is 0.0
+#   - updates the savings balance with a negative value
+
+    def test_update_savings_balance(self):
+
+        self.account_1.update_savings_balance(100)
+        self.assertEqual(self.customer_1.balance_savings, 100)
+
+        self.account_1.update_savings_balance(0.0)
+        self.assertEqual(self.customer_1.balance_savings, 0.0)
+
+        self.account_1.update_savings_balance(-100)
+        self.assertEqual(self.customer_1.balance_savings, -100)
+
+
+
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
