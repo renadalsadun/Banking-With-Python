@@ -56,7 +56,7 @@ class Customer():
 
         # add to all customers list 
         cls.all_customers.append(new_customer) 
-        write_to_file("data", new_customer)
+        write_to_file("bank", new_customer)
         print("Customer added successfully!\nCustomer details: ", new_customer)
         return new_customer
 
@@ -75,7 +75,7 @@ class Customer():
 
 
     def __str__ (self):
-        return f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}'
+        return f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}, Password: {self.password}'
 
 
 
