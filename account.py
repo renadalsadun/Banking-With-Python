@@ -57,79 +57,85 @@ class Account():
 
     def withdraw_from_savings( self , amount ):
 
-        if self.check_balance( self.saving_balance , amount ):
-            
-            if self.overdraft == 0:
-                if self.saving_balance - amount < 0:
-                    self.saving_balance -= ( amount + 35 )
-                    self.overdraft += 1
-                    self.update_saving_balance(self.saving_balance)
-                    print('Overdraft! Charged $35 fee') 
-                    log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.customer.balance_savings)
+        if self.activity:
+            if self.check_balance( self.saving_balance , amount ):
+                
+                if self.overdraft == 0:
+                    if self.saving_balance - amount < 0:
+                        self.saving_balance -= ( amount + 35 )
+                        self.overdraft += 1
+                        self.update_saving_balance(self.saving_balance)
+                        print('Overdraft! Charged $35 fee') 
+                        log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.customer.balance_savings)
 
 
 
-                else:
-                    self.saving_balance = self.saving_balance - amount
-                    self.update_saving_balance(self.saving_balance)
-                    log_transaction( self.customer.account_id, "withdrawal from saving", amount, self.customer.balance_savings)
+                    else:
+                        self.saving_balance = self.saving_balance - amount
+                        self.update_saving_balance(self.saving_balance)
+                        log_transaction( self.customer.account_id, "withdrawal from saving", amount, self.customer.balance_savings)
 
-                print(f'Withdrawal successful. New saving balance: ${self.saving_balance}')
+                    print(f'Withdrawal successful. New saving balance: ${self.saving_balance}')
 
-            elif self.overdraft == 1:
-                if self.saving_balance - (amount + 35) >= -100:
-                    self.saving_balance -= (amount + 35)
-                    self.update_saving_balance(self.saving_balance)
-                    self.overdraft += 1
-                    print('Overdraft! Charged $35 fee')
-                    log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.customer.balance_savings) 
-                    self.is_active()
+                elif self.overdraft == 1:
+                    if self.saving_balance - (amount + 35) >= -100:
+                        self.saving_balance -= (amount + 35)
+                        self.update_saving_balance(self.saving_balance)
+                        self.overdraft += 1
+                        print('Overdraft! Charged $35 fee')
+                        log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.customer.balance_savings) 
+                        self.is_active()
 
-                else:
-                    print( " not enough funds to withdraw! " )
+                    else:
+                        print( " not enough funds to withdraw! " )
+            else:
+                print( " not enough funds to withdraw! " )
         else:
-            print( " not enough funds to withdraw! " )
+            print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.saving_balance} ")
 
 
 
     def withdraw_from_checking( self , amount ):
 
-        if self.check_balance( self.checking_balance , amount ):
-            
-            if self.overdraft == 0:
-                if self.checking_balance - amount < 0:
-                    if self.checking_balance - (amount + 35) >= -100:
-                        self.checking_balance -= ( amount + 35 )
-                        self.overdraft += 1
+        if self.activity:
+            if self.check_balance( self.checking_balance , amount ):
+                
+                if self.overdraft == 0:
+                    if self.checking_balance - amount < 0:
+                        if self.checking_balance - (amount + 35) >= -100:
+                            self.checking_balance -= ( amount + 35 )
+                            self.overdraft += 1
+                            self.update_checking_balance(self.checking_balance)
+                            log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
+                            print('Overdraft! Charged $35 fee') 
+                        else:
+                            print ("can not withdraw, not enough funds!")
+
+                    else:
+                        self.checking_balance -=  amount
                         self.update_checking_balance(self.checking_balance)
                         log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
-                        print('Overdraft! Charged $35 fee') 
-                    else:
-                        print ("can not withdraw, not enough funds!")
 
-                else:
-                    self.checking_balance -=  amount
-                    self.update_checking_balance(self.checking_balance)
-                    log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
-
-                    
-                print(f'Withdrawal successful. New checking balance: ${self.checking_balance}')
-
-            elif self.overdraft == 1:
-                if self.checking_balance - (amount + 35) >= -100:
-                    self.checking_balance -= (amount + 35)
-                    self.update_checking_balance(self.checking_balance)
-                    log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
-
-                    self.overdraft += 1
-                    print('Overdraft! Charged $35 fee') 
+                        
                     print(f'Withdrawal successful. New checking balance: ${self.checking_balance}')
-                    self.is_active()
 
-                else:
-                    print( " not enough funds to withdraw! " )
+                elif self.overdraft == 1:
+                    if self.checking_balance - (amount + 35) >= -100:
+                        self.checking_balance -= (amount + 35)
+                        self.update_checking_balance(self.checking_balance)
+                        log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
+
+                        self.overdraft += 1
+                        print('Overdraft! Charged $35 fee') 
+                        print(f'Withdrawal successful. New checking balance: ${self.checking_balance}')
+                        self.is_active()
+
+                    else:
+                        print( " not enough funds to withdraw! " )
+            else:
+                print( " not enough funds to withdraw! " )
         else:
-            print( " not enough funds to withdraw! " )
+            print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.checking_balance} ")
 
 
 
