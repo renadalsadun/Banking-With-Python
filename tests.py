@@ -1,11 +1,15 @@
-#####################################################################################
-#                           CUSTOMER CLASS TESTS                                    #
-##################################################################################### 
-
 from customer import Customer 
 from access_file import reading_from_file, write_to_file
 from account import Account
 import unittest
+
+
+
+#####################################################################################
+#                           CUSTOMER CLASS TESTS                                    #
+##################################################################################### 
+
+
 
 class Test_Customer(unittest.TestCase):
 
@@ -121,7 +125,29 @@ class Test_Account(unittest.TestCase):
         self.assertTrue(self.account_1.activity)
 
 
+# Test for check_balance() Method:
+#   - returns true when there are enough funds and the account is active
+#   - returns false when the account is deactivated and the balance is sufficient
+#   - returns false when there aren't enough funds after the $35 fee
+#   - returns false when the account is active but the balance will go below the minimum
+#   - returns False if the account is deactivated
 
+    def test_check_balance(self):
+
+        self.account_1.activity = True
+        self.assertTrue(self.account_1.check_balance(self.account_1.checking_balance, 50))
+        
+        self.assertFalse(self.account_1.check_balance(self.account_1.checking_balance, 165.5))
+
+        self.account_1.overdraft = 2
+        self.account_1.activity = self.account_1.is_active()
+        self.assertFalse(self.account_1.check_balance(self.account_1.checking_balance, 10))
+        
+        self.account_1.overdraft = 1
+        self.account_1.activity = self.account_1.is_active()
+        self.assertFalse(self.account_1.check_balance(self.account_1.checking_balance, 200))
+
+        self.assertTrue(self.account_1.check_balance(self.account_1.checking_balance, 40))
 
 
 if __name__ == '__main__':
