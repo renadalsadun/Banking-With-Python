@@ -14,6 +14,7 @@ def reading_from_file(file_name):
     '''
     reads the data from file_name file, and compines it in a dictionary with the header
     '''
+
     try:
         with open(f'{file_name}.csv', mode='r') as file_reader:
             content = csv.reader( file_reader , delimiter = ';' )
@@ -32,7 +33,11 @@ def reading_from_file(file_name):
 
     
 def write_to_file(file_name, customer):
-    """Appends a new customer's data to the CSV file without removing previous data"""
+
+    '''
+    Appends a new customer's data to the CSV file without removing previous data
+    '''
+
     try:
         # to check if file exsits or not
         file = os.path.isfile(f"{file_name}.csv") #returns true if file exists, false if it doesnt
@@ -64,8 +69,43 @@ def write_to_file(file_name, customer):
 
 
 
+def find_customer_index(file_name, account_id):
+
+    '''
+    reads the data from the file and returns the row index of the customer with the account_id  
+    '''
+
+    try:
+        with open(f'{file_name}.csv', mode='r', newline='') as infile:
+            reader = csv.reader( infile , delimiter = ';' )
+            rows = list(reader)
+        
+# header = [ 0: 'account_id' , 1: 'first_name' , 2: 'last_name' , 3: 'password' , 4: 'balance_checking' , 5: 'balance_savings' ] 
+
+        for index, row in enumerate(rows[1:]): # to skip header!
+            if row[0] == account_id: # row[0] is the account id!!! 
+                return index + 1 #1 is the header we skipped :)
+            
+        return -1  # if not found :(
+    
+
+    except FileNotFoundError:
+        print(f"Error: File '{file_name}.csv' was not found")
+        return -1
+
+    except csv.Error:
+        print(f"Error: Could not read the CSV file '{file_name}.csv")
+        return -1
+
+
+
+
 def log_transaction(account_id, transaction_type, amount, balance):
-    """ Logs a transaction in the transactions.csv file """
+    
+    '''
+    logs a transaction in the transactions.csv file '
+    '''
+
     try:
         # to check if file exsits or not
         file = os.path.isfile("transactions.csv") #returns true if file exists, false if it doesnt
@@ -88,6 +128,13 @@ def log_transaction(account_id, transaction_type, amount, balance):
 
 
 def update_file(file_name, row_index, col_index, new_value):
+
+    '''
+    updates the value at a specific row and column in the passed file
+    reads the data from the file, modifies the value at the specified row and column, 
+    and then writes the updated data back to the file (re-write the whole file :( )
+    '''
+
     with open(file_name, mode='r', newline='') as infile:
         reader = csv.reader(infile, delimiter=';')
         rows = list(reader) #list of lists(rows)
