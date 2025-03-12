@@ -100,8 +100,10 @@ class Test_Customer(unittest.TestCase):
 class Test_Account(unittest.TestCase):
 
     def setUp(self): 
-        self.customer_1 = Customer("Test", "User1", "password", balance_checking=100, balance_savings=100)
+        self.customer_1 = Customer.add_new_customer("Test", "User1", "password", balance_checking=100, balance_savings=100)
         self.account_1 = Account(self.customer_1)
+        self.customer_2 = Customer.add_new_customer("Test2", "user2", "password2", balance_checking=200, balance_savings=150)
+        self.account_2 = Account(self.customer_2)
 
 
 # Test for is_active() Method:
@@ -234,6 +236,56 @@ class Test_Account(unittest.TestCase):
         self.account_1.checking_balance = 100
         self.account_1.withdraw_from_checking(200) 
         self.assertEqual(self.account_1.checking_balance, 100) #doesnt change cuz there is insufficient funds 
+
+# Test for deposit() Method:
+
+#   - deposits into the checking account and updates the balance
+#   - deposits into the savings account and updates the balance
+#   - handles invalid deposit when the wrong account type is provided
+
+    def test_deposit(self):
+        
+        self.account_1.deposit('checking', 50)
+        self.assertEqual(self.account_1.checking_balance, 150) # 100 + 50
+
+        self.account_1.deposit('savings', 15.98)
+        self.assertEqual(self.account_1.savings_balance, 115.98) # 100 + 15.98 
+
+        self.account_1.deposit('investment', 50)  
+        self.assertEqual(self.account_1.checking_balance, 150) # doesnt change
+        self.assertEqual(self.account_1.savings_balance, 115.98) # also doesnt change
+
+# Test for transfer() Method:
+
+#   - transfers from checking to savings within the same account
+#   - transfers from savings to checking within the same account
+#   - transfers from checking to another customer’s checking account XXXXX
+#   - transfers from savings to another customer’s checking account XXXXX
+#   - prevents transfer if there are insufficient funds or invalid account details
+
+    def test_transfer(self):
+
+        self.account_1.transfer(50, 'checking', self.customer_1.account_id)
+        self.assertEqual(self.account_1.checking_balance, 50)
+        self.assertEqual(self.account_1.savings_balance, 150)
+
+        self.account_1.transfer(50, 'savings', self.customer_1.account_id)
+        self.assertEqual(self.account_1.savings_balance, 100)
+        self.assertEqual(self.account_1.checking_balance, 100)
+
+        # self.account_1.transfer(50, 'checking', self.customer_2.account_id)
+        # self.assertEqual(self.account_1.checking_balance, 50)
+        # self.assertEqual(self.account_2.checking_balance, 250)
+
+        # self.account_1.transfer(50, 'savings', self.customer_2.account_id)
+        # self.assertEqual(self.account_1.savings_balance, 50)
+        # self.assertEqual(self.account_2.checking_balance, 250)
+
+        self.account_1.transfer(500, 'savings', self.customer_1.account_id)
+        self.assertEqual(self.account_1.savings_balance, 100)
+        self.assertEqual(self.account_1.checking_balance, 100)
+
+
 
 
 
