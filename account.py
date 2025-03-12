@@ -145,14 +145,14 @@ class Account():
             self.update_checking_balance(self.checking_balance)
             print(f'Deposit successful! New checking balance: ${self.checking_balance}')
             log_transaction( self.customer.account_id, "Deposit from checking", amount, self.checking_balance)
-            self.reactivate_account()
+            self.reactivate_account(account)
 
         elif account == 'savings':
             self.savings_balance += amount
             self.update_savings_balance(self.savings_balance)
             print(f'Deposit successful! New savings balance: ${self.savings_balance}')
             log_transaction( self.customer.account_id, "Deposit from savings", amount, self.savings_balance)
-            self.reactivate_account()
+            self.reactivate_account(account)
 
         else:
             print('Wrong account, deposite not successful')
@@ -261,10 +261,15 @@ class Account():
 
             if account == 'checking':
                 if self.checking_balance >= 0:
+                    self.overdraft = 0
+                    self.is_active()
                     print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
+
             
             elif account == 'savings':
                 if self.savings_balance >= 0:
+                    self.overdraft = 0
+                    self.is_active()
                     print(f"Account Reactivated! cuurent savings balance {self.savings_balance}")
 
 
@@ -328,6 +333,8 @@ print('operation to be done : withdraw 5\nrun result: \n')
 test_account.withdraw_from_checking(5)  # Expect "Transaction failed" message
 print(f'\ncurrent checking balance = {test_account.checking_balance}\ncurrent activity = {test_account.activity}\ncurrent overdraft = {test_account.overdraft}\n')
 
+test_account.deposit('checking',500)  # Expect "Transaction failed" message
+print(f'\ncurrent checking balance = {test_account.checking_balance}\ncurrent activity = {test_account.activity}\ncurrent overdraft = {test_account.overdraft}\n')
 
 # Checking if account is actually inactive
 is_active_status = test_account.is_active()
