@@ -57,8 +57,14 @@ def write_to_file(file_name, customer):
 def log_transaction(account_id, transaction_type, amount, balance):
     """ Logs a transaction in the transactions.csv file """
     try:
+        # to check if file exsits or not
+        file = os.path.isfile("transactions.csv") #returns true if file exists, false if it doesnt
+
         with open("transactions.csv", mode="a", newline="") as file_writer:
             writer = csv.writer(file_writer, delimiter=";")
+            if not file: #if it doesnt exists
+                writer.writerow(transaction_header)
+
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             writer.writerow([timestamp, account_id, transaction_type, amount, balance])
     except Exception as e:
