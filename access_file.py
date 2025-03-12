@@ -1,7 +1,7 @@
 
 import csv
 from datetime import datetime
-
+import os
 
 header = [ 'account_id' , 'first_name' , 'last_name' , 'password' , 'balance_checking' , 'balance_savings' ] 
 
@@ -33,8 +33,16 @@ def reading_from_file(file_name):
 def write_to_file(file_name, customer):
     """Appends a new customer's data to the CSV file without removing previous data"""
     try:
+        # to check if file exsits or not
+        file = os.path.isfile(f"{file_name}.csv") #returns true if file exists, false if it doesnt
+        
+
         with open(f"{file_name}.csv", mode="a", newline="") as file_writer:
             writer = csv.writer(file_writer, delimiter=";")
+
+            if not file: #if it doesnt exists
+                writer.writerow(header)
+
             writer.writerow([
                 customer.account_id,
                 customer.first_name,
