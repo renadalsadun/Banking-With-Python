@@ -14,7 +14,9 @@ class Account():
 
 
     def is_active(self):
-
+        '''
+        checks the overdraft, if it is less than 2, the account is active. otherwise the account is not active
+        '''
         if self.overdraft < 2:
             self.activity = True
         
@@ -28,7 +30,7 @@ class Account():
     def check_balance( self , balance , amount ):
 
         '''
-        Returns True if the operation is valid, otherwise returns False 
+        Returns True if the operation is valid (will not exceed the limit), otherwise returns False 
         
         '''
 
@@ -46,11 +48,18 @@ class Account():
 
 
     def update_checking_balance(self, new_balance):
+        '''
+        updates the checking balance for the customer 
+        '''
         self.customer.set_checking_balance(new_balance)
 
 
 
-    def update_savings_balance(self, new_balance):
+    def update_savings_balance(self, new_balance):        
+        '''
+        updates the savings balance for the customer 
+        '''
+
         self.customer.set_savings_balance(new_balance)
 
 
@@ -74,6 +83,11 @@ class Account():
 
 
     def withdraw_from_checking( self , amount ):
+        '''
+        checks if the account is active. if it is proceeds with the withdrawal transaction
+        withdraws the amount from the checking account if it doesn't exceed the limit (-100), otherwise the withdrawal is not processed
+        updates overdraft based on account status, deactivates account if the overdraft reached 2
+        '''
         successful_withdraw_flag = True
         if self.activity:
             if self.check_balance( self.checking_balance , amount ):
@@ -122,19 +136,23 @@ class Account():
 
 
     def deposit(self, account, amount):
+        '''
+        deposit the amount in either savings or checking accounts, updates the customer, logs the transaction,
+        and check if the account will be reactivated after the deposit in checking account
+        '''
+
         if account == 'checking':
             self.checking_balance += amount
             self.update_checking_balance(self.checking_balance)
             print(f'Deposit successful! New checking balance: ${self.checking_balance}')
             log_transaction( self.customer.account_id, "Deposit from checking", amount, self.checking_balance)
-            self.reactivate_account(account)
+            self.reactivate_account()
 
         elif account == 'savings':
             self.savings_balance += amount
             self.update_savings_balance(self.savings_balance)
             print(f'Deposit successful! New savings balance: ${self.savings_balance}')
             log_transaction( self.customer.account_id, "Deposit from savings", amount, self.savings_balance)
-            self.reactivate_account(account)
 
         else:
             print('Wrong account, deposite not successful')
@@ -142,6 +160,15 @@ class Account():
 
 
     def transfer( self, amount, account, target_account_id ):
+        '''
+        transfers the amount between accounts
+        transfers can occur:
+        1. Between the checking and savings accounts of the same customer
+        2. From the checking or savings account of one customer (logged in) to the checking account of another customer
+
+        if the withdrawal is successful, the corresponding deposit is made in the target account
+        if the withdrawal fails (due to insufficient funds), the transfer is aborted
+        '''
 
         target_customer = Customer.find_customer(target_account_id)
 
@@ -237,25 +264,20 @@ class Account():
 
 
 
-    def reactivate_account(self, account):
-        
+    def reactivate_account(self):
+        '''
+        reactivates the account if it is deactivated
+        the account will be reactivated only if the balance is not ,
+        by resetting the overdraft to zero and the activity to true
+        '''
         #if the account is currently deactivates
-
         if not self.is_active():
+            if self.checking_balance >= 0:
+                self.overdraft = 0
+                self.is_active()
+                print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
 
-            if account == 'checking':
-                if self.checking_balance >= 0:
-                    self.overdraft = 0
-                    self.is_active()
-                    print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
-
-            
-            elif account == 'savings':
-                if self.savings_balance >= 0:
-                    self.overdraft = 0
-                    self.is_active()
-                    print(f"Account Reactivated! cuurent savings balance {self.savings_balance}")
-
+        
 
 
 
