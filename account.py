@@ -222,6 +222,8 @@ class Account():
                     # if the withdrawal was successful
                     else:
                         target_account.deposit('checking', amount)
+                        target_account.customer.set_checking_balance(target_account.checking_balance)
+
                         print(f"Transfering ${amount} to account {target_account_id} was successful!")
                         
 

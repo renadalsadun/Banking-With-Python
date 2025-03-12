@@ -265,25 +265,49 @@ class Test_Account(unittest.TestCase):
 
     def test_transfer(self):
 
+# customer 1 checking: 100
+# customer 1 savings: 100
+
         self.account_1.transfer(50, 'checking', self.customer_1.account_id)
         self.assertEqual(self.account_1.checking_balance, 50)
         self.assertEqual(self.account_1.savings_balance, 150)
+
+# customer 1 checking: 50
+# customer 1 savings: 150
 
         self.account_1.transfer(50, 'savings', self.customer_1.account_id)
         self.assertEqual(self.account_1.savings_balance, 100)
         self.assertEqual(self.account_1.checking_balance, 100)
 
-        # self.account_1.transfer(50, 'checking', self.customer_2.account_id)
-        # self.assertEqual(self.account_1.checking_balance, 50)
-        # self.assertEqual(self.account_2.checking_balance, 250)
+# customer 1 checking: 100
+# customer 1 savings: 100
+# customer 2 checking: 200
+# customer 2 savings: 150
 
-        # self.account_1.transfer(50, 'savings', self.customer_2.account_id)
-        # self.assertEqual(self.account_1.savings_balance, 50)
-        # self.assertEqual(self.account_2.checking_balance, 250)
+        self.account_1.transfer(50, 'checking', self.customer_2.account_id)
+        self.assertEqual(self.account_1.checking_balance, 50)
+        self.assertEqual(self.customer_2.balance_checking, 250)
+
+# customer 1 checking: 50
+# customer 1 savings: 100
+# customer 2 checking: 250
+# customer 2 savings: 150
+
+        self.account_1.transfer(50, 'savings', self.customer_2.account_id)
+        self.assertEqual(self.account_1.savings_balance, 50)
+        self.assertEqual(self.customer_2.balance_checking, 300)
+
+# customer 1 checking: 50
+# customer 1 savings: 50
+# customer 2 checking: 300
+# customer 2 savings: 150
 
         self.account_1.transfer(500, 'savings', self.customer_1.account_id)
-        self.assertEqual(self.account_1.savings_balance, 100)
-        self.assertEqual(self.account_1.checking_balance, 100)
+        self.assertEqual(self.account_1.savings_balance, 50) # doesnt change because there is not enough funds
+        self.assertEqual(self.account_1.checking_balance, 50) # same
+
+# customer 1 checking: 50
+# customer 1 savings: 50
 
 
 
