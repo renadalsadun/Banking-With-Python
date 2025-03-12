@@ -28,6 +28,8 @@ class Customer():
         self.balance_checking = float(balance_checking) if balance_checking is not None else 0.0
         self.balance_savings = float(balance_savings) if balance_savings is not None else 0.0
 
+
+
     @classmethod
     def find_customer( cls , account_id ): 
         '''
@@ -40,12 +42,15 @@ class Customer():
         return None # if the customer id is not valid, return none ;;
 
 
+
     @classmethod
     def get_number_of_customers(cls):
         '''
         returns the total number of customers
         '''
         return len(cls.all_customers)
+
+
 
     @classmethod
     def add_new_customer(cls, first_name, last_name, password , balance_checking = None , balance_savings = None , account_id = None  ):
@@ -70,11 +75,15 @@ class Customer():
         print("Customer added successfully!\nCustomer details: ", new_customer)
         return new_customer
 
+
+
     def set_checking_balance( self , new_balance ):
         '''
         setter for checking balance
         '''
         self.balance_checking = new_balance
+
+
 
     def set_savings_balance( self , new_balance ):
         '''
@@ -83,12 +92,16 @@ class Customer():
 
         self.balance_savings = new_balance
 
+
+
     def get_checking_balance( self ):
         '''
         getter for checking balance
         '''
 
         return self.balance_checking 
+
+
 
     def get_savings_balance( self ):
         '''
