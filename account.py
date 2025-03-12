@@ -7,7 +7,7 @@ class Account():
     def __init__(self, customer: Customer , activity = True , overdraft = 0 ):
         self.customer = customer
         self.checking_balance = customer.get_checking_balance()
-        self.saving_balance = customer.get_saving_balance()
+        self.savings_balance = customer.get_saving_balance()
         self.activity = activity
         self.overdraft = overdraft
 
@@ -50,7 +50,7 @@ class Account():
 
 
 
-    def update_saving_balance(self, new_balance):
+    def update_savings_balance(self, new_balance):
         self.customer.set_saving_balance(new_balance)
 
 
@@ -58,40 +58,40 @@ class Account():
     def withdraw_from_savings( self , amount ):
 
         if self.activity:
-            if self.check_balance( self.saving_balance , amount ):
+            if self.check_balance( self.savings_balance , amount ):
                 
                 if self.overdraft == 0:
-                    if self.saving_balance - amount < 0:
-                        self.saving_balance -= ( amount + 35 )
+                    if self.savings_balance - amount < 0:
+                        self.savings_balance -= ( amount + 35 )
                         self.overdraft += 1
-                        self.update_saving_balance(self.saving_balance)
+                        self.update_savings_balance(self.savings_balance)
                         print('Overdraft! Charged $35 fee') 
-                        log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.customer.balance_savings)
+                        log_transaction( self.customer.account_id, "withdrawal from savings", amount, self.savings_balance)
 
 
 
                     else:
-                        self.saving_balance = self.saving_balance - amount
-                        self.update_saving_balance(self.saving_balance)
-                        log_transaction( self.customer.account_id, "withdrawal from saving", amount, self.customer.balance_savings)
+                        self.savings_balance = self.savings_balance - amount
+                        self.update_savings_balance(self.savings_balance)
+                        log_transaction( self.customer.account_id, "withdrawal from saving", amount, self.savings_balance)
 
-                    print(f'Withdrawal successful. New saving balance: ${self.saving_balance}')
+                    print(f'Withdrawal successful. New saving balance: ${self.savings_balance}')
 
                 elif self.overdraft == 1:
-                    if self.saving_balance - (amount + 35) >= -100:
-                        self.saving_balance -= (amount + 35)
-                        self.update_saving_balance(self.saving_balance)
+                    if self.savings_balance - (amount + 35) >= -100:
+                        self.savings_balance -= (amount + 35)
+                        self.update_savings_balance(self.savings_balance)
                         self.overdraft += 1
                         print('Overdraft! Charged $35 fee')
-                        log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.customer.balance_savings) 
+                        log_transaction( self.customer.account_id, "withdrawal from savinf", amount, self.savings_balance) 
                         self.is_active()
 
                     else:
-                        print( " not enough funds to withdraw! " )
+                        print( "Not enough funds to withdraw! " )
             else:
-                print( " not enough funds to withdraw! " )
+                print( "Not enough funds to withdraw! " )
         else:
-            print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.saving_balance} ")
+            print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.savings_balance} ")
 
 
 
@@ -109,7 +109,7 @@ class Account():
                             log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
                             print('Overdraft! Charged $35 fee') 
                         else:
-                            print ("can not withdraw, not enough funds!")
+                            print ("Can not withdraw, not enough funds!")
 
                     else:
                         self.checking_balance -=  amount
@@ -131,9 +131,9 @@ class Account():
                         self.is_active()
 
                     else:
-                        print( " not enough funds to withdraw! " )
+                        print( "Not enough funds to withdraw! " )
             else:
-                print( " not enough funds to withdraw! " )
+                print( "Not enough funds to withdraw! " )
         else:
             print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.checking_balance} ")
 
@@ -143,18 +143,19 @@ class Account():
         if account == 'checking':
             self.checking_balance += amount
             self.update_checking_balance(self.checking_balance)
-            print(f'Deposite successful! New checking balance: ${self.checking_balance}')
-            log_transaction( self.customer.account_id, "deposit from checking", amount, self.customer.balance_checking)
+            print(f'Deposit successful! New checking balance: ${self.checking_balance}')
+            log_transaction( self.customer.account_id, "Deposit from checking", amount, self.checking_balance)
+            self.reactivate_account()
 
-
-        elif account == 'saving':
-            self.saving_balance += amount
-            self.update_saving_balance(self.saving_balance)
-            print(f'Deposite successful! New saving balance: ${self.saving_balance}')
-            log_transaction( self.customer.account_id, "deposit from saving", amount, self.customer.balance_savings)
+        elif account == 'savings':
+            self.savings_balance += amount
+            self.update_savings_balance(self.savings_balance)
+            print(f'Deposit successful! New savings balance: ${self.savings_balance}')
+            log_transaction( self.customer.account_id, "Deposit from savings", amount, self.savings_balance)
+            self.reactivate_account()
 
         else:
-            print('wrong account, deposite not successful')
+            print('Wrong account, deposite not successful')
 
 
 
@@ -181,29 +182,29 @@ class Account():
 
                     # if the withdrawal was successful
                     else:
-                        self.deposit('saving', amount)
-                        print("Transfer from checking to savings was successful!")
+                        self.deposit('savings', amount)
+                        print(f"Transfering {amount} from checking to savings was successful!")
 
 
                 # SAVING -> CHECKING
-                elif account.lower() == 'saving':
-                                        
+                elif account.lower() == 'savings':
+                    
                     #to determine if the withdrawal waas successfully made 
-                    old_saving = self.saving_balance
+                    old_savings = self.savings_balance
                     self.withdraw_from_savings(amount)
 
                     #if the withdrawal failed
-                    if old_saving == self.saving_balance:
+                    if old_savings == self.savings_balance:
                         print("Transfer failed! ")
 
                     # if the withdrawal was successful
                     else:
                         self.deposit('checking', amount)
-                        print("Transfer from saving to checking was successful!")
+                        print(f"Transfering ${amount} from savings to checking was successful!")
 
 
                 else:
-                    print (f'Account ({account}) is not correct, enter either checking or saving!')
+                    print (f'Account ({account}) is not correct, enter either checking or savings!')
 
         # CASE 2: transfering to another customer's account (only to target customer’s checking)       
             else:
@@ -221,33 +222,80 @@ class Account():
                     # if the withdrawal was successful
                     else:
                         target_account.deposit('checking', amount)
-                        print(f"Transfer to account {target_account_id} was successful!")
+                        print(f"Transfering ${amount} to account {target_account_id} was successful!")
+                        
 
 
 
-                elif account.lower() == 'saving':
+                elif account.lower() == 'savings':
                                         
                     #to determine if the withdrawal waas successfully made 
-                    old_saving = self.saving_balance
+                    old_savings = self.savings_balance
                     self.withdraw_from_savings(amount)
 
                     #if the withdrawal failed
-                    if old_saving == self.saving_balance:
+                    if old_savings == self.savings_balance:
                         print("Transfer failed! ")
 
                     # if the withdrawal was successful
                     else:
                         target_account.deposit('checking', amount)
-                        print(f"Transfer to account {target_account_id} was successful!")
+                        print(f"Transfering {amount} to account {target_account_id} was successful!")
 
 
                 
                 else:
-                    print (f'Account ({account}) is not correct, enter either checking or saving!')
+                    print (f'Account ({account}) is not correct, enter either checking or savings!')
 
     #if the target customer was not found
         else:
             print (f'Account with id number {target_account_id} was not found')
+
+
+
+    def reactivate_account(self, account):
+        
+        #if the account is currently deactivates
+
+        if not self.is_active():
+
+            if account == 'checking':
+                if self.checking_balance >= 0:
+                    print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
+            
+            elif account == 'savings':
+                if self.savings_balance >= 0:
+                    print(f"Account Reactivated! cuurent savings balance {self.savings_balance}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
