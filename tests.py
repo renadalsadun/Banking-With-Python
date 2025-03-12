@@ -2,7 +2,9 @@
 #                           CUSTOMER CLASS TESTS                                    #
 ##################################################################################### 
 
-from customer import reading_from_file, Customer 
+from customer import Customer 
+from access_file import reading_from_file, write_to_file
+from account import Account
 import unittest
 
 class Test_Customer(unittest.TestCase):
@@ -93,22 +95,33 @@ class Test_Customer(unittest.TestCase):
 
 class Test_Account(unittest.TestCase):
 
-    #def withdraw_from_savings(self, amount):
-    #     pass
-
-    # def withdraw_from_checking(self, amount):
-    #     pass
-
-    # def transfer(self, amount, target_account_id, target_account):
-    #     pass
-    
-    # def check_balance(self):
-    #     pass
+    def setUp(self): 
+        self.customer_1 = Customer("Test", "User1", "password", balance_checking=100, balance_savings=100)
+        self.account_1 = Account(self.customer_1)
 
 
-    # test case: withdraw_from_savings(self, customer, amount)
-    # successfully subtract the amount from the customer's account
-    pass
+# Test for is_active() Method:
+#   - returns true is the account overdraft is 1 or 0
+#   - returns flase (deactivates the account) if the overdraft is 2
+#   - successfully updates the activity status correctly
+
+    def test_is_active(self):
+        self.account_1.overdraft = 0
+        self.assertTrue(self.account_1.is_active())
+
+        self.account_1.overdraft = 1
+        self.assertTrue(self.account_1.is_active())
+
+        self.account_1.overdraft = 2
+        self.assertFalse(self.account_1.is_active())
+        self.assertFalse(self.account_1.activity)
+
+        self.account_1.overdraft = 1        
+        self.assertTrue(self.account_1.is_active())
+        self.assertTrue(self.account_1.activity)
+
+
+
 
 
 if __name__ == '__main__':
