@@ -63,13 +63,13 @@ class Customer():
     def set_checking_balance( self , new_balance ):
         self.balance_checking = new_balance
 
-    def set_saving_balance( self , new_balance ):
+    def set_savings_balance( self , new_balance ):
         self.balance_savings = new_balance
 
     def get_checking_balance( self ):
         return self.balance_checking 
 
-    def get_saving_balance( self ):
+    def get_savings_balance( self ):
         return self.balance_savings
 
 

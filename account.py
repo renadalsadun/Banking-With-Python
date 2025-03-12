@@ -7,7 +7,7 @@ class Account():
     def __init__(self, customer: Customer , activity = True , overdraft = 0 ):
         self.customer = customer
         self.checking_balance = customer.get_checking_balance()
-        self.savings_balance = customer.get_saving_balance()
+        self.savings_balance = customer.get_savings_balance()
         self.activity = activity
         self.overdraft = overdraft
 
@@ -51,7 +51,7 @@ class Account():
 
 
     def update_savings_balance(self, new_balance):
-        self.customer.set_saving_balance(new_balance)
+        self.customer.set_savings_balance(new_balance)
 
 
 
