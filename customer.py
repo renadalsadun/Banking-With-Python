@@ -129,20 +129,19 @@ class Customer():
 
 ############################################### END OF CUSTOMER CLASS
 
-if __name__ == "__main__":
-    existing_customers = reading_from_file("data")
+existing_customers = reading_from_file("data")
 
 # adding the customers in data.csv file to the Customer class!!    
-    if existing_customers[0]['account_id'] != '':
-        for existing_customer in existing_customers:
-            Customer.add_new_customer(
-                existing_customer["first_name"],
-                existing_customer["last_name"],
-                existing_customer["password"],
-                existing_customer["balance_checking"],
-                existing_customer["balance_savings"],
-                existing_customer["account_id"]
-            )
+if existing_customers[0]['account_id'] != '':
+    for existing_customer in existing_customers:
+        Customer.add_new_customer(
+            existing_customer["first_name"],
+            existing_customer["last_name"],
+            existing_customer["password"],
+            existing_customer["balance_checking"],
+            existing_customer["balance_savings"],
+            existing_customer["account_id"]
+        )
 
 
     # debugging
