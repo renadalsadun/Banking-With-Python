@@ -1,7 +1,7 @@
 from tabulate import tabulate
-import termcolor
+from termcolor import colored, cprint
 from simple_term_menu import TerminalMenu
-
+from access_file import get_password
 from customer import Customer
 from account import Account
 
@@ -25,25 +25,55 @@ class Bank():
         selection = options[selected_index]
         return selection
 
+    # @classmethod
+    # def action_menu(cls,action_dict):
+    #     action = Bank.menu(list(action_dict.keys()))  # Convert keys to list and display as a menu
+    #     selected_action = action_dict.get(action)  # Get the method that corresponds to the selected action
+    #     selected_action()  # Invoke the selected action
+
+
+
     @classmethod
-    def action_menu(cls,action_dict):
-        action = Bank.menu(list(action_dict.keys()))  # Convert keys to list and display as a menu
-        selected_action = action_dict.get(action)  # Get the method that corresponds to the selected action
-        selected_action()  # Invoke the selected action
+    def login(cls):
+        selection ='Try Again'
+        while selection == 'Try Again':
+            id = input('Enter Account ID: ')
+
+            try:
+                id = int(id)
+
+            except ValueError:
+                print(colored('Please enter a valid numeric ID. Only numbers are allowed. Try again', 'cyan', attrs=['dark']))
+                print('What do you want to do?')
+                selection = Bank.menu(['Try Again', 'Back to Main Menu'])
+
+            if type(id) == int:
+                password = get_password(id)
+                if password:
+                    input_password = input('Enter Password: ')
+                    if input_password == password:
+                        customer = Customer.find_customer(id)
+                else:
+                    print 
+
+
 
 
     @classmethod
     def start_bank(cls):
 
+        print(colored("     Welcome to pyBank! \n", 'light_magenta'))
+
+        selection = ''
         while cls.cashier_input.lower() != 'quit':
-            print("Welcome to pyBank\nWhat are you up to?")
+            print(colored('\n------------------ pyBank            \n\n', 'grey', attrs=['bold']))
             selection = Bank.menu(Bank.main_menu_options)
             if selection == 'Login to a Customer Account':
                 print('login!')
-            elif selection == 'Quit':
+                Bank.login()
+
+            if selection == 'Quit':
                 cls.cashier_input = 'Quit'
-            else:
-                print('not login :(')
             # self.cashier_input = input() # input from cashier !
 
 
