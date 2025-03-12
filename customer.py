@@ -77,6 +77,17 @@ class Customer():
 
 
 
+    @classmethod
+    def login(cls , id, password):
+        search_customer = cls.find_customer(id)
+        if search_customer: #if the customer found
+            if search_customer.password == password:
+                return search_customer
+            
+        return None
+
+
+
     def set_checking_balance( self , new_balance ):
         '''
         setter for checking balance
