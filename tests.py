@@ -185,6 +185,58 @@ class Test_Account(unittest.TestCase):
         self.assertEqual(self.customer_1.balance_savings, -100)
 
 
+# Test for withdraw_from_savings() Method:
+
+#   - successfully withdraws from savings when there are sufficient funds and no overdraft fee is charged
+#   - successfully withdraws from savings with a $35 fee if balance falls below $0
+#   - successfully prevents withdrawal from savings if the account is deactivated
+#   - confirms no withdrawal can occur if there are insufficient funds
+
+    def test_withdraw_from_savings(self):
+        self.account_1.withdraw_from_savings(1)
+        self.assertEqual(self.account_1.savings_balance, 99)
+
+        self.account_1.withdraw_from_savings(120)
+        self.assertEqual(self.account_1.savings_balance, -56)  
+        self.assertEqual(self.account_1.overdraft, 1)
+
+        self.account_1.withdraw_from_savings(1) #now the account is deactivated
+        self.assertEqual(self.account_1.overdraft, 2)
+        self.assertEqual(self.account_1.savings_balance, -92) 
+        self.account_1.withdraw_from_savings(1) 
+        self.assertEqual(self.account_1.savings_balance, -92)  # doesnt change because withdrawals are prevented
+        
+        self.account_1.savings_balance = 100
+        self.account_1.withdraw_from_savings(200) 
+        self.assertEqual(self.account_1.savings_balance, 100) #doesnt change cuz there is insufficient funds 
+
+# Test for withdraw_from_checking() Method:
+
+#   - successfully withdraws from checking when there are sufficient funds and no overdraft fee is charged
+#   - successfully withdraws from checking with a $35 fee if balance falls below $0
+#   - successfully prevents withdrawal from checking if the account is deactivated
+#   - confirms no withdrawal can occur if there are insufficient funds
+
+    def test_withdraw_from_checking(self):
+        self.account_1.withdraw_from_checking(1)
+        self.assertEqual(self.account_1.checking_balance, 99)
+
+        self.account_1.withdraw_from_checking(120)
+        self.assertEqual(self.account_1.checking_balance, -56)  
+        self.assertEqual(self.account_1.overdraft, 1)
+
+        self.account_1.withdraw_from_checking(1) #now the account is deactivated
+        self.assertEqual(self.account_1.overdraft, 2)
+        self.assertEqual(self.account_1.checking_balance, -92) 
+        self.account_1.withdraw_from_checking(1) 
+        self.assertEqual(self.account_1.checking_balance, -92)  # doesnt change because withdrawals are prevented
+        
+        self.account_1.checking_balance = 100
+        self.account_1.withdraw_from_checking(200) 
+        self.assertEqual(self.account_1.checking_balance, 100) #doesnt change cuz there is insufficient funds 
+
+
+
 
 
 
