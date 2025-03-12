@@ -70,5 +70,17 @@ def log_transaction(account_id, transaction_type, amount, balance):
     except Exception as e:
         print(f"Error logging transaction: {e}")
 
-def update_file(file_name, customer):
-    pass
+def update_file(file_name, row_index, col_index, new_value):
+    with open(file_name, mode='r', newline='') as infile:
+        reader = csv.reader(infile, delimiter=';')
+        rows = list(reader) #list of lists(rows)
+
+    if row_index < len(rows) and col_index < len(rows[row_index]):
+        rows[row_index][col_index] = new_value
+    else:
+        print("Error: Index out of range")
+        return
+
+    with open(file_name, mode='w', newline='') as outfile:
+        writer = csv.writer(outfile, delimiter=';')
+        writer.writerows(rows)
