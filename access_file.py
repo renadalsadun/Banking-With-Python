@@ -99,7 +99,6 @@ def find_customer_index(file_name, account_id):
 
 
 
-
 def log_transaction(account_id, transaction_type, amount, balance):
     
     '''
@@ -148,3 +147,35 @@ def update_file(file_name, row_index, col_index, new_value):
     with open(file_name, mode='w', newline='') as outfile:
         writer = csv.writer(outfile, delimiter=';')
         writer.writerows(rows)
+
+
+
+def get_password(file_name, account_id):
+
+    '''
+    gets the password for a specific customer using their account_id
+    reads the data from the file and checks the account_id to return the corresponding password
+    '''
+
+    try:
+        with open(f'{file_name}.csv', mode='r', newline='') as infile:
+            reader = csv.reader( infile , delimiter = ';' )
+            rows = list(reader)
+        
+# header = [ 0: 'account_id' , 1: 'first_name' , 2: 'last_name' , 3: 'password' , 4: 'balance_checking' , 5: 'balance_savings' ] 
+
+        for index, row in enumerate(rows[1:]): # to skip header!
+            if row[0] == account_id: # row[0] is the account id!!! 
+                return row[3] # row 3 is the password
+            
+    
+        return None  # if not found :(
+    
+    except FileNotFoundError:
+        print(f"Error: File '{file_name}.csv' not found")
+        return None
+    
+    except csv.Error:
+        print(f"Error: Could not read the CSV file '{file_name}.csv")
+        return None
+
