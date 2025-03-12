@@ -35,26 +35,26 @@ class Bank():
 
     @classmethod
     def login(cls):
-        selection ='Try Again'
-        while selection == 'Try Again':
-            id = input('Enter Account ID: ')
+        # selection ='Try Again'
+        # while selection == 'Try Again':
+        #     id = input('Enter Account ID: ')
 
-            try:
-                id = int(id)
+        #     try:
+        #         id = int(id)
 
-            except ValueError:
-                print(colored('Please enter a valid numeric ID. Only numbers are allowed. Try again', 'cyan', attrs=['dark']))
-                print('What do you want to do?')
-                selection = Bank.menu(['Try Again', 'Back to Main Menu'])
+        #     except ValueError:
+        #         print(colored('Please enter a valid numeric ID. Only numbers are allowed. Try again', 'cyan', attrs=['dark']))
 
-            if type(id) == int:
-                password = get_password(id)
-                if password:
-                    input_password = input('Enter Password: ')
-                    if input_password == password:
-                        customer = Customer.find_customer(id)
-                else:
-                    print 
+        #     if type(id) == int:
+        #         password = get_password(id)
+        #         if password:
+        #             input_password = input('Enter Password: ')
+        #             if input_password == password:
+        #                 customer = Customer.find_customer(id)
+        #         else:
+        #             print('Seems like the account doesnt exists')
+        #     print('What do you want to do?')
+        #     selection = Bank.menu(['Try Again', 'Back to Main Menu'])
 
 
 

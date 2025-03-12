@@ -2,7 +2,7 @@
 
 import csv
 from access_file import reading_from_file, write_to_file
-
+from termcolor import colored
 ############################################### CUSTOMER CLASS
 
 class Customer():
@@ -72,19 +72,27 @@ class Customer():
         # add to all customers list 
         cls.all_customers.append(new_customer) 
         write_to_file("bank", new_customer)
-        print("Customer added successfully!\nCustomer details: ", new_customer)
+        # print("Customer added successfully!\nCustomer details: ", new_customer)
         return new_customer
 
 
 
     @classmethod
-    def login(cls , id, password):
-        search_customer = cls.find_customer(id)
-        if search_customer: #if the customer found
-            if search_customer.password == password:
-                return search_customer
-            
-        return None
+    def login(cls):
+        while True:
+            try:
+                id = int(input("Enter Account ID: "))
+                password = input("Enter Password: ")
+
+                customer = cls.find_customer(id)  
+                if customer and customer.password == password: #if the customer found and the pass is correct
+                    print(colored(f"Welcome, {customer.first_name}!", "green"))
+                    return customer  # return the logged in customer
+                else:
+                    print(colored("Invalid ID or password. Please try again.", "red"))
+
+            except ValueError:
+                print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
 
 
