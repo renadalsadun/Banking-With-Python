@@ -271,13 +271,19 @@ class Account():
         by resetting the overdraft to zero and the activity to true
         '''
         #if the account is currently deactivates
-        if not self.is_active():
-            if self.checking_balance >= 0:
-                self.overdraft = 0
+        # if not self.is_active():
+        #     if self.checking_balance >= 0:
+        #         self.overdraft = 0
+        #         self.is_active()
+        #         print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
+
+        if self.checking_balance >= 0:
+            self.overdraft = 0
+            if not self.is_active():
                 self.is_active()
                 print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
 
-        
+
 
 
 
