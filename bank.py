@@ -114,7 +114,7 @@ class Bank():
                 amount = input('Enter the Amount you want to Deposit into Checking Account:')
                 try:
                     if float(amount):
-                        logged_account.deposit(float(amount), 'checking')
+                        logged_account.deposit('checking', float(amount))
                 except ValueError:
                     print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
@@ -125,7 +125,7 @@ class Bank():
                 amount = input('Enter the Amount you want to Deposit into Checking Account:')
                 try:
                     if float(amount):
-                        logged_account.deposit(float(amount), 'savings')
+                        logged_account.deposit( 'savings',float(amount))
                 except ValueError:
                     print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
@@ -215,7 +215,7 @@ class Bank():
         print(colored("     Welcome to pyBank! \n", 'light_magenta'))
 
         while True:
-            print(colored('\n------------------ pyBank            \n\n', 'grey', attrs=['bold']))
+            print(colored('\n------------------ pyBank            \n', 'grey', attrs=['bold']))
             selection = cls.menu(cls.main_menu_options)
             if selection == cls.main_menu_options[0]:
                 pass
@@ -229,7 +229,6 @@ class Bank():
             else :
                 print(colored('It\'s been great having you! \nGoodbye! <3', 'magenta'))
                 break
-            # self.cashier_input = input() # input from cashier !
 
 
         

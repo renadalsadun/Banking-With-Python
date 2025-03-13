@@ -1,0 +1,9 @@
+timestamp;account_id;transaction_type;amount;balance
+2025-03-13 04:16:30;10003;withdrawal from checking;100.0;1900.0
+2025-03-13 04:16:51;10003;withdrawal from savings;100.0;19900.0
+2025-03-13 04:17:03;10003;withdrawal from checking;50.0;1850.0
+2025-03-13 04:17:03;10003;Deposit from savings;50.0;19950.0
+2025-03-13 04:17:10;10003;withdrawal from savings;50.0;19900.0
+2025-03-13 04:17:10;10003;Deposit from checking;50.0;1900.0
+2025-03-13 04:17:50;10003;withdrawal from checking;90.0;1810.0
+2025-03-13 04:17:50;10001;Deposit from checking;90.0;1090.0
