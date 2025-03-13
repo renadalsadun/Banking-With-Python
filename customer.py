@@ -122,7 +122,7 @@ class Customer():
 
 
     def __str__ (self):
-        return colored(f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}, Password: {self.password}', 'cyan',attrs=['reverse'])
+        return colored(f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}, Password: {self.password}', 'green',attrs=['reverse'])
 
 
 

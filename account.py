@@ -1,5 +1,5 @@
 from customer import Customer
-from access_file import log_transaction #(account_id, transaction_type, amount, balance)
+from access_file import log_transaction, find_customer_index, update_file #(account_id, transaction_type, amount, balance)
 from termcolor import colored
 
 class Account():
@@ -72,12 +72,14 @@ class Account():
         if self.activity:
             if self.savings_balance - amount < 0: # it the balance will be negative
                 print(colored('Not enough funds to withdraw!', 'red', attrs=['dark']))
-                print(colored(f'\nSavings account balance: {self.savings_balance}', attrs=['bold']))
+                print(f'\nSavings account balance: {self.savings_balance}')
             else:
                 self.savings_balance -= amount
                 self.update_savings_balance(self.savings_balance)
                 log_transaction( self.customer.account_id, "withdrawal from savings", amount, self.savings_balance)
                 print(colored(f'Withdrawal successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
+                cus_index = find_customer_index('bank',self.customer.account_id)
+                update_file('bank',cus_index,5,self.savings_balance) #column 4 -> checking, column 5 -> savings
         else:
             print(colored('Account is Deactivated! Deposit the required amount into Checking Account to activate it!', 'red', attrs=['dark', 'reverse']))
             print(colored(f'\nRequired Amount: {self.checking_balance}', attrs=['bold']))
@@ -102,11 +104,16 @@ class Account():
                             self.overdraft += 1
                             self.update_checking_balance(self.checking_balance)
                             log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
-                            print(colored('Overdraft! Charged $35 fee', 'red', attrs=['reverse'])) 
+                            print(colored('Overdraft! Charged $35 fee', 'red', attrs=['dark']))
+                            cus_index = find_customer_index('bank',self.customer.account_id)
+                            update_file('bank',cus_index,4,self.checking_balance) #column 4 -> checking, column 5 -> savings
+ 
                             successful_withdraw_flag = True
 
                         else:                                             # if it does go below the limit!
                             print(colored('Not enough funds to withdraw!', 'red', attrs=['dark']))
+                            print(f'Checking account balance: {self.checking_balance}')
+
                             successful_withdraw_flag = False 
 
                     else:
@@ -114,6 +121,9 @@ class Account():
                         self.update_checking_balance(self.checking_balance)
                         log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
                         successful_withdraw_flag = True
+                        cus_index = find_customer_index('bank',self.customer.account_id)
+                        update_file('bank',cus_index,4,self.checking_balance) #column 4 -> checking, column 5 -> savings
+
                         
                     if successful_withdraw_flag:    
                         print(colored(f'Withdrawal successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
@@ -125,8 +135,11 @@ class Account():
                         log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
 
                         self.overdraft += 1
-                        print(colored('Overdraft! Charged $35 fee', 'red', attrs=['reverse'])) 
+                        print(colored('Overdraft! Charged $35 fee', 'red', attrs=['dark'])) 
                         print(colored(f'Withdrawal successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
+                        cus_index = find_customer_index('bank',self.customer.account_id)
+                        update_file('bank',cus_index,4,self.checking_balance) #column 4 -> checking, column 5 -> savings
+
                         self.is_active()
                         if not self.activity:
                             print(colored('Account is Deactivated! Deposit the required amount into Checking Account to activate it!', 'red', attrs=['dark', 'reverse']))
@@ -154,6 +167,8 @@ class Account():
             self.update_checking_balance(self.checking_balance)
             print(colored(f'Deposit successful! New checking balance: ${self.checking_balance}', 'green', attrs=['dark']))
             log_transaction( self.customer.account_id, "Deposit from checking", amount, self.checking_balance)
+            cus_index = find_customer_index('bank',self.customer.account_id)
+            update_file('bank',cus_index,4,self.checking_balance) #column 4 -> checking, column 5 -> savings
             self.reactivate_account()
 
         elif account == 'savings':
@@ -161,6 +176,9 @@ class Account():
             self.update_savings_balance(self.savings_balance)
             print(colored(f'Deposit successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
             log_transaction( self.customer.account_id, "Deposit from savings", amount, self.savings_balance)
+            cus_index = find_customer_index('bank',self.customer.account_id)
+            update_file('bank',cus_index,5,self.checking_balance) #column 4 -> checking, column 5 -> savings
+
 
         else:
             print(colored('Wrong account, deposite not successful', 'red', attrs=['dark']))

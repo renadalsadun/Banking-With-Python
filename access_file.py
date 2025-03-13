@@ -18,18 +18,33 @@ def reading_from_file(file_name):
 
     try:
         with open(f'{file_name}.csv', mode='r') as file_reader:
-            content = csv.reader( file_reader , delimiter = ';' )
-            data = [dict(zip(header, line)) for line in content]
+            content = csv.reader(file_reader, delimiter=';')
+
+            if file_name == 'bank':
+                file_header = next(content, None)  # skip header 
+                if not file_header:
+                    print(colored(f"Error: The file '{file_name}.csv' is empty.", 'red'))
+                    return []
+            
+            elif file_name == 'data':
+                file_header = header  # default header
+            
+            else:
+                file_header = next(content, None)
+                if not file_header:
+                    print(colored(f"Error: The file '{file_name}.csv' is empty.", 'red'))
+                    return []
+
+            data = [dict(zip(file_header, line)) for line in content]
             return data
 
-    
     except FileNotFoundError:
         print(colored(f"Error: File '{file_name}.csv' was not found", 'red', attrs=['dark']))
-        return [dict.fromkeys(header, '')]
+        return []
 
     except csv.Error:
-        print(colored(f"Error: Could not read the CSV file '{file_name}.csv", 'red', attrs=['dark']))
-        return [dict.fromkeys(header, '')]
+        print(colored(f"Error: Could not read the CSV file '{file_name}.csv'", 'red', attrs=['dark']))
+        return []
 
 
     
@@ -135,7 +150,7 @@ def update_file(file_name, row_index, col_index, new_value):
     and then writes the updated data back to the file (re-write the whole file :( )
     '''
 
-    with open(file_name, mode='r', newline='') as infile:
+    with open(f'{file_name}.csv', mode='r', newline='') as infile:
         reader = csv.reader(infile, delimiter=';')
         rows = list(reader) #list of lists(rows)
 
@@ -145,7 +160,7 @@ def update_file(file_name, row_index, col_index, new_value):
         print(colored("Error: Index out of range", 'red', attrs=['dark']))
         return
 
-    with open(file_name, mode='w', newline='') as outfile:
+    with open(f'{file_name}.csv', mode='w', newline='') as outfile:
         writer = csv.writer(outfile, delimiter=';')
         writer.writerows(rows)
 
