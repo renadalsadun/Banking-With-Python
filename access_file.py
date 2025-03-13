@@ -179,3 +179,31 @@ def get_password(file_name, account_id):
         print(f"Error: Could not read the CSV file '{file_name}.csv")
         return None
 
+
+
+def get_transactions_by_account_id(file_name, account_id):
+
+    '''
+    reads transactions from a CSV file and filters by account_id, returns the list, or none
+    '''
+
+
+    transactions = []
+    
+    with open(f'{file_name}.csv', 'r') as file:
+        reader = csv.reader(file, delimiter=';')
+        
+        next(reader, None)#skip header 
+        
+        for row in reader:
+            if row[1] == str(account_id):  # row [1] is the account_id in the transactions.csv!
+                transactions.append(row)
+    
+    return transactions
+
+
+    # if transactions:
+    #     headers = ["Timestamp", "Account ID", "Transaction Type", "Amount", "Balance"]
+    #     print(tabulate(transactions, headers=headers, tablefmt="grid"))
+    # else:
+    #     print("No transactions found for this account.")
