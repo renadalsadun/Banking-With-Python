@@ -269,7 +269,7 @@ class Bank():
     @classmethod
     def start_bank(cls):
 
-        print(colored("     Welcome to pyBank! \n", 'light_magenta'))
+        print(colored("         Welcome to pyBank! -Renad's Branch-\n", 'light_magenta'))
 
         while True:
             print(colored('\n------------------ pyBank            \n', 'grey', attrs=['bold']))

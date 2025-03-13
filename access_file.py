@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 from termcolor import colored
 
+
 header = [ 'account_id' , 'first_name' , 'last_name' , 'password' , 'balance_checking' , 'balance_savings' ] 
 
 transaction_header = ['timestamp', 'account_id', 'transaction_type', 'amount', 'balance']
