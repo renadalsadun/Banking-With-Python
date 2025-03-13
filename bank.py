@@ -143,28 +143,66 @@ class Bank():
             selection = cls.menu(cls.transfer_options)
             if selection == cls.transfer_options[0]:  # Transfer from Checking to Savings
                 print(colored('>>>'+cls.transfer_options[0], 'grey'))
-                
 
+
+                # checking
+                amount = input('Enter the Amount you want to Transfer from Checking account into Savings Account:')
+                try:
+                    if float(amount):
+                        logged_account.transfer(float(amount), 'checking', logged_customer.account_id)
+                except ValueError:
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.transfer_options[1]:  # Transfer from Savings to Checking
                 print(colored('>>>'+cls.transfer_options[1], 'grey'))
-            
 
+
+                # savings
+                amount = input('Enter the Amount you want to Transfer from Savings account into Checking Account:')
+                try:
+                    if float(amount):
+                        logged_account.transfer(float(amount), 'savings', logged_customer.account_id)
+                except ValueError:
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.transfer_options[2]:  # Transfer from Checking to Another Customer\'s Account
                 print(colored('>>>'+cls.transfer_options[2], 'grey'))
 
+                
+                try:
+                    id = int(input("Enter the Account ID of the user you want to transfer to: "))
+                except ValueError:
+                    print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
+                if int(id):
+                    amount = input(f'Enter the Amount you want to Transfer from your Checking account into {id}\'s Account:')
+                    try:
+                        if float(amount):
+                            logged_account.transfer(float(amount), 'checking', id)
+                    except ValueError:
+                        print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.transfer_options[3]:  # Transfer from Savings to Another Customer\'s Account
                 print(colored('>>>'+cls.transfer_options[3], 'grey'))
-                
-
 
                 
+                try:
+                    id = int(input("Enter the Account ID of the user you want to transfer to: "))
+                except ValueError:
+                    print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+
+                if int(id):
+                    amount = input(f'Enter the Amount you want to Transfer from your Savings account into {id}\'s Account:')
+                    try:
+                        if float(amount):
+                            logged_account.transfer(float(amount), 'savings', id)
+                    except ValueError:
+                        print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+
+
             else:
                 print(colored("Logging out of the Transfer menu...", "yellow")) #Back to Main Menu
                 break  
