@@ -202,8 +202,3 @@ def get_transactions_by_account_id(file_name, account_id):
     return transactions
 
 
-    # if transactions:
-    #     headers = ["Timestamp", "Account ID", "Transaction Type", "Amount", "Balance"]
-    #     print(tabulate(transactions, headers=headers, tablefmt="grid"))
-    # else:
-    #     print("No transactions found for this account.")
