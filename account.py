@@ -78,7 +78,7 @@ class Account():
                 log_transaction( self.customer.account_id, "withdrawal from savings", amount, self.savings_balance)
                 print(f'Withdrawal successful. New savings balance: ${self.savings_balance}')
         else:
-            print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.checking_balance} ")
+            print(f"Account is Deactivated! Deposit the required amount into Checking Account to activate it!\nRequired Amount: {self.checking_balance} ")
 
 
 
@@ -125,6 +125,9 @@ class Account():
                         print('Overdraft! Charged $35 fee') 
                         print(f'Withdrawal successful. New checking balance: ${self.checking_balance}')
                         self.is_active()
+                        if not self.activity:
+                            print(f"Account is Deactivated! Deposit the required amount into Checking Acoount to activate it\nRequired Amount: {self.checking_balance} ")
+
 
                     else:
                         print( "Not enough funds to withdraw! " )
@@ -269,14 +272,8 @@ class Account():
         reactivates the account if it is deactivated
         the account will be reactivated only if the balance is not ,
         by resetting the overdraft to zero and the activity to true
+        note: the method is also used to reset overdrafts if the customer deposits the required amount!
         '''
-        #if the account is currently deactivates
-        # if not self.is_active():
-        #     if self.checking_balance >= 0:
-        #         self.overdraft = 0
-        #         self.is_active()
-        #         print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
-
         if self.checking_balance >= 0:
             self.overdraft = 0
             if not self.is_active():
