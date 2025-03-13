@@ -214,7 +214,7 @@ class Bank():
         pass
 
 
-    
+
     @classmethod
     def start_bank(cls):
 
@@ -224,10 +224,10 @@ class Bank():
             print(colored('\n------------------ pyBank            \n', 'grey', attrs=['bold']))
             selection = cls.menu(cls.main_menu_options)
             if selection == cls.main_menu_options[0]:
-                pass
+                cls.create_new_customer()
             
             elif selection == cls.main_menu_options[1]:
-                print('>>>'+cls.main_menu_options[1])
+                print('>>> '+cls.main_menu_options[1])
                 customer = cls.login()
                 if customer:
                     cls.logged_customer_menu(customer, Account(customer))
