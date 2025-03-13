@@ -2,6 +2,7 @@
 import csv
 from datetime import datetime
 import os
+from termcolor import colored
 
 header = [ 'account_id' , 'first_name' , 'last_name' , 'password' , 'balance_checking' , 'balance_savings' ] 
 
@@ -23,11 +24,11 @@ def reading_from_file(file_name):
 
     
     except FileNotFoundError:
-        print(f"Error: File '{file_name}.csv' was not found")
+        print(colored(f"Error: File '{file_name}.csv' was not found", 'red', attrs=['dark']))
         return [dict.fromkeys(header, '')]
 
     except csv.Error:
-        print(f"Error: Could not read the CSV file '{file_name}.csv")
+        print(colored(f"Error: Could not read the CSV file '{file_name}.csv", 'red', attrs=['dark']))
         return [dict.fromkeys(header, '')]
 
 
@@ -65,7 +66,7 @@ def write_to_file(file_name, customer):
                 customer.balance_savings
             ])
     except Exception as e:
-        print(f"Error writing to file: {e}")
+        print(colored(f"Error writing to file: {e}", 'red', attrs=['dark']))
 
 
 
@@ -90,11 +91,11 @@ def find_customer_index(file_name, account_id):
     
 
     except FileNotFoundError:
-        print(f"Error: File '{file_name}.csv' was not found")
+        print(colored(f"Error: File '{file_name}.csv' was not found"), 'red', attrs=['dark'])
         return -1
 
     except csv.Error:
-        print(f"Error: Could not read the CSV file '{file_name}.csv")
+        print(colored(f"Error: Could not read the CSV file '{file_name}.csv", 'red', attrs=['dark']))
         return -1
 
 
@@ -122,7 +123,7 @@ def log_transaction(account_id, transaction_type, amount, balance):
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             writer.writerow([timestamp, account_id, transaction_type, amount, balance])
     except Exception as e:
-        print(f"Error logging transaction: {e}")
+        print(colored(f"Error logging transaction: {e}", 'red', attrs=['dark']))
 
 
 
@@ -141,7 +142,7 @@ def update_file(file_name, row_index, col_index, new_value):
     if row_index < len(rows) and col_index < len(rows[row_index]):
         rows[row_index][col_index] = new_value
     else:
-        print("Error: Index out of range")
+        print(colored("Error: Index out of range", 'red', attrs=['dark']))
         return
 
     with open(file_name, mode='w', newline='') as outfile:
@@ -172,11 +173,11 @@ def get_password(file_name, account_id):
         return None  # if not found :(
     
     except FileNotFoundError:
-        print(f"Error: File '{file_name}.csv' not found")
+        print(colored(f"Error: File '{file_name}.csv' not found", 'red', attrs=['dark']))
         return None
     
     except csv.Error:
-        print(f"Error: Could not read the CSV file '{file_name}.csv")
+        print(colored(f"Error: Could not read the CSV file '{file_name}.csv", 'red', attrs=['dark']))
         return None
 
 

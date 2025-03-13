@@ -1,6 +1,5 @@
 
 
-import csv
 from access_file import reading_from_file, write_to_file
 from termcolor import colored
 ############################################### CUSTOMER CLASS
@@ -66,7 +65,7 @@ class Customer():
         try:
             new_customer = Customer(first_name, last_name, password, balance_checking, balance_savings , account_id )
         except Exception as e:
-            print(f"Error creating customer: {e}")
+            print(colored(f"Error creating customer: {e}", 'red'))
             return None
 
         # add to all customers list 
@@ -123,7 +122,7 @@ class Customer():
 
 
     def __str__ (self):
-        return f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}, Password: {self.password}'
+        return colored(f'Account ID: {self.account_id}, Name: {self.first_name} {self.last_name}, Password: {self.password}', 'cyan',attrs=['reverse'])
 
 
 
@@ -143,15 +142,6 @@ if existing_customers[0]['account_id'] != '':
             existing_customer["account_id"]
         )
 
-
-    # debugging
-    # Customer.add_new_customer('renad', 'alsadun', 'password', '0292.2', 0.0 )
-
-    # for customer in Customer.all_customers:
-    #     print(customer)
-
-    # print(Customer.next_account_id)
-    #end of debugging
 
 
 

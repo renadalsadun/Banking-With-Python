@@ -1,6 +1,6 @@
 from customer import Customer
 from access_file import log_transaction #(account_id, transaction_type, amount, balance)
-
+from termcolor import colored
 
 class Account():
 
@@ -71,14 +71,17 @@ class Account():
         '''
         if self.activity:
             if self.savings_balance - amount < 0: # it the balance will be negative
-                print(f'Not enough funds to withdraw!\nsavings account balance : {self.savings_balance}')
+                print(colored('Not enough funds to withdraw!', 'red', attrs=['dark']))
+                print(colored(f'\nSavings account balance: {self.savings_balance}', attrs=['bold']))
             else:
                 self.savings_balance -= amount
                 self.update_savings_balance(self.savings_balance)
                 log_transaction( self.customer.account_id, "withdrawal from savings", amount, self.savings_balance)
-                print(f'Withdrawal successful. New savings balance: ${self.savings_balance}')
+                print(colored(f'Withdrawal successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
         else:
-            print(f"Account is Deactivated! Deposit the required amount into Checking Account to activate it!\nRequired Amount: {self.checking_balance} ")
+            print(colored('Account is Deactivated! Deposit the required amount into Checking Account to activate it!', 'red', attrs=['dark', 'reverse']))
+            print(colored(f'\nRequired Amount: {self.checking_balance}', attrs=['bold']))
+
 
 
 
@@ -99,11 +102,11 @@ class Account():
                             self.overdraft += 1
                             self.update_checking_balance(self.checking_balance)
                             log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
-                            print('Overdraft! Charged $35 fee') 
+                            print(colored('Overdraft! Charged $35 fee', 'red', attrs=['reverse'])) 
                             successful_withdraw_flag = True
 
                         else:                                             # if it does go below the limit!
-                            print ("Can not withdraw, not enough funds!")
+                            print(colored('Not enough funds to withdraw!', 'red', attrs=['dark']))
                             successful_withdraw_flag = False 
 
                     else:
@@ -113,7 +116,7 @@ class Account():
                         successful_withdraw_flag = True
                         
                     if successful_withdraw_flag:    
-                        print(f'Withdrawal successful. New checking balance: ${self.checking_balance}')
+                        print(colored(f'Withdrawal successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
 
                 elif self.overdraft == 1:
                     if self.checking_balance - (amount + 35) >= -100: # wont go below limit
@@ -122,19 +125,21 @@ class Account():
                         log_transaction( self.customer.account_id, "withdrawal from checking", amount, self.customer.balance_checking)
 
                         self.overdraft += 1
-                        print('Overdraft! Charged $35 fee') 
-                        print(f'Withdrawal successful. New checking balance: ${self.checking_balance}')
+                        print(colored('Overdraft! Charged $35 fee', 'red', attrs=['reverse'])) 
+                        print(colored(f'Withdrawal successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
                         self.is_active()
                         if not self.activity:
-                            print(f"Account is Deactivated! Deposit the required amount into Checking Acoount to activate it\nRequired Amount: {self.checking_balance} ")
+                            print(colored('Account is Deactivated! Deposit the required amount into Checking Account to activate it!', 'red', attrs=['dark', 'reverse']))
+                            print(colored(f'\nRequired Amount: {self.checking_balance}', attrs=['bold']))
 
 
                     else:
-                        print( "Not enough funds to withdraw! " )
+                        print(colored('Not enough funds to withdraw!', 'red', attrs=['dark']))
             else:
-                print( "Not enough funds to withdraw! " )
+                print(colored('Not enough funds to withdraw!', 'red', attrs=['dark']))
         else:
-            print(f"Account is Deactivated! Deposit the required amount to activate it\nRequired Amount: {self.checking_balance} ")
+            print(colored('Account is Deactivated! Deposit the required amount into Checking Account to activate it!', 'red', attrs=['dark', 'reverse']))
+            print(colored(f'\nRequired Amount: {self.checking_balance}', attrs=['bold']))
 
 
 
@@ -147,18 +152,18 @@ class Account():
         if account == 'checking':
             self.checking_balance += amount
             self.update_checking_balance(self.checking_balance)
-            print(f'Deposit successful! New checking balance: ${self.checking_balance}')
+            print(colored(f'Deposit successful! New checking balance: ${self.checking_balance}', 'green', attrs=['dark']))
             log_transaction( self.customer.account_id, "Deposit from checking", amount, self.checking_balance)
             self.reactivate_account()
 
         elif account == 'savings':
             self.savings_balance += amount
             self.update_savings_balance(self.savings_balance)
-            print(f'Deposit successful! New savings balance: ${self.savings_balance}')
+            print(colored(f'Deposit successful! New savings balance: ${self.savings_balance}', 'green', attrs=['dark']))
             log_transaction( self.customer.account_id, "Deposit from savings", amount, self.savings_balance)
 
         else:
-            print('Wrong account, deposite not successful')
+            print(colored('Wrong account, deposite not successful', 'red', attrs=['dark']))
 
 
 
@@ -190,12 +195,12 @@ class Account():
 
                     #if the withdrawal failed
                     if old_checking == self.checking_balance:
-                        print("Transfer failed! ")
+                        print(colored("Error: Transfer failed!", 'red', attrs=['dark']))
 
                     # if the withdrawal was successful
                     else:
                         self.deposit('savings', amount)
-                        print(f"Transfering {amount} from checking to savings was successful!")
+                        print(colored(f"Transfer successful! New checking balance ${self.checking_balance}!", 'green', attrs=['dark']))
 
 
                 # SAVING -> CHECKING
@@ -207,16 +212,16 @@ class Account():
 
                     #if the withdrawal failed
                     if old_savings == self.savings_balance:
-                        print("Transfer failed! ")
+                        print(colored("Error: Transfer failed!", 'red', attrs=['dark']))
 
                     # if the withdrawal was successful
                     else:
                         self.deposit('checking', amount)
-                        print(f"Transfering ${amount} from savings to checking was successful!")
+                        print(colored(f"Transfer successful! New savings balance ${self.savings_balance}!", 'green', attrs=['dark']))
 
 
                 else:
-                    print (f'Account ({account}) is not correct, enter either checking or savings!')
+                    print (colored(f'Account ({account}) is not correct, enter either checking or savings!','red',attrs=['dark']))
 
         # CASE 2: transfering to another customer's account (only to target customer’s checking)       
             else:
@@ -229,14 +234,14 @@ class Account():
 
                     #if the withdrawal failed
                     if old_checking == self.checking_balance:
-                        print("Transfer failed! ")
+                        print(colored("Error: Transfer failed!", 'red', attrs=['dark']))
 
                     # if the withdrawal was successful
                     else:
                         target_account.deposit('checking', amount)
                         target_account.customer.set_checking_balance(target_account.checking_balance)
 
-                        print(f"Transfering ${amount} to account {target_account_id} was successful!")
+                        print(colored(f"Transfer successful! New checking balance ${self.checking_balance}!", 'green', attrs=['dark']))
                         
 
 
@@ -249,21 +254,21 @@ class Account():
 
                     #if the withdrawal failed
                     if old_savings == self.savings_balance:
-                        print("Transfer failed! ")
+                        print(colored("Error: Transfer failed!", 'red', attrs=['dark']))
 
                     # if the withdrawal was successful
                     else:
                         target_account.deposit('checking', amount)
-                        print(f"Transfering {amount} to account {target_account_id} was successful!")
+                        print(colored(f"Transfer successful! New checking balance ${self.savings_balance}!", 'green', attrs=['dark']))
 
 
                 
                 else:
-                    print (f'Account ({account}) is not correct, enter either checking or savings!')
+                    print (colored(f'Account ({account}) is not correct, enter either checking or savings!','red',attrs=['dark']))
 
     #if the target customer was not found
         else:
-            print (f'Account with id number {target_account_id} was not found')
+            print (colored(f'Account with id number {target_account_id} was not found','red',attrs=['dark']))
 
 
 
@@ -278,7 +283,7 @@ class Account():
             self.overdraft = 0
             if not self.is_active():
                 self.is_active()
-                print(f"Account Reactivated! cuurent checking balance {self.checking_balance}")
+                print(colored(f"Account Reactivated! cuurent checking balance {self.checking_balance}", color='green', attrs=['reverse']))
 
 
 

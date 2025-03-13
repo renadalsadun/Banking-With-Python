@@ -1,7 +1,7 @@
 from tabulate import tabulate
 from termcolor import colored, cprint
 from simple_term_menu import TerminalMenu
-from access_file import get_password
+from access_file import get_password, get_transactions_by_account_id
 from customer import Customer
 from account import Account
 
@@ -10,14 +10,14 @@ class Bank():
 
     cashier_input = ""
     main_menu_options = ['Add new Customer', 'Login to a Customer Account' , 'Quit']
-    logged_customer_account_options = ['Withdraw Money from Account', 'Deposit Money into Account', 'Transfer Money Between Accounts', 'Log Out']
-    withdraw_options = ['Withdraw from Checking Account' ,'Withdraw from Savings Account', 'Back to Main Menu']
-    deposit_options = ['Deposit into Checking Account','Deposit into Savings Account', 'Back to Main Menu']
+    logged_customer_account_options = ['Withdraw Money from Account', 'Deposit Money into Account', 'Transfer Money Between Accounts', 'View Transaction History','Log Out']
+    withdraw_options = ['Withdraw from Checking Account' ,'Withdraw from Savings Account', 'Back to Transactions Menu']
+    deposit_options = ['Deposit into Checking Account','Deposit into Savings Account', 'Back to Transactions Menu']
     transfer_options = ['Transfer from Checking to Savings', 
                         'Transfer from Savings to Checking', 
                         'Transfer from Checking to Another Customer\'s Account ', 
                         'Transfer from Savings to Another Customer\'s Account', 
-                        'Back to Main Menu']
+                        'Back to Transactions Menu']
     
 
     @classmethod
@@ -34,38 +34,48 @@ class Bank():
         while True:
             try:
                 id = int(input("Enter Account ID: "))
+                if not int(id):
+                    raise ValueError
+                
                 password = input("Enter Password: ")
                 customer = Customer.login(id,password)
 
                 if customer:
                     return customer 
                 else:
-                    print(colored("Invalid ID or password. Please try again.", "red"))
+                    print(colored("Invalid ID or password. Please try again\n", "red"))
 
             except ValueError:
-                print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                print(colored("Please enter a valid numeric ID. Only numbers are allowed\n", "cyan", attrs=["dark"]))
+            selection = cls.menu(["Try Again", "Back to Main Menu"])
+            if selection == "Back to Main Menu":
+                return None  
 
 
 
     @classmethod
     def logged_customer_menu(cls, logged_customer , logged_account):
         while True:
-            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!\n", 'cyan'))
             selection = cls.menu(cls.logged_customer_account_options)
             if selection == cls.logged_customer_account_options[0]:  # Withdraw Money from Account
-                print(colored('>>>'+cls.logged_customer_account_options[0], 'grey'))
+                print(colored('>>> '+cls.logged_customer_account_options[0], 'grey'))
                 cls.logged_customer_withdrawal(logged_customer , logged_account)
 
             elif selection == cls.logged_customer_account_options[1]:  # Deposit Money into Account
-                print(colored('>>>'+cls.logged_customer_account_options[1], 'grey'))
+                print(colored('>>> '+cls.logged_customer_account_options[1], 'grey'))
                 cls.logged_customer_deposit(logged_customer , logged_account)
 
             elif selection == cls.logged_customer_account_options[2]:  # Transfer Money Between Accounts
-                print(colored('>>>'+cls.logged_customer_account_options[2], 'grey'))
+                print(colored('>>> '+cls.logged_customer_account_options[2], 'grey'))
                 cls.logged_customer_transfer(logged_customer , logged_account)
 
+            elif selection == cls.logged_customer_account_options[3]:  # View Transaction History
+                print(colored('>>> '+cls.logged_customer_account_options[3], 'grey'))
+                cls.logged_customer_transactions(logged_customer , logged_account)
+
             else:
-                print(colored("Logging out and returning to the main menu...", "yellow")) #log out
+                print(colored("Logging out and returning to the main menu...\n", "yellow")) #log out
                 break  
 
 
@@ -73,7 +83,7 @@ class Bank():
     @classmethod
     def logged_customer_withdrawal(cls, logged_customer , logged_account):
         while True:
-            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!\n", "cyan"))
             selection = cls.menu(cls.withdraw_options)
             if selection == cls.withdraw_options[0]:  # Withdraw from Checking Account
                 print(colored('>>>'+cls.withdraw_options[0], 'grey'))
@@ -83,7 +93,7 @@ class Bank():
                     if float(amount):
                         logged_account.withdraw_from_checking(float(amount))
                 except ValueError:
-                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
                 
             elif selection == cls.withdraw_options[1]:  # Withdraw from Savings Account
@@ -95,10 +105,10 @@ class Bank():
                         logged_account.withdraw_from_savings(float(amount))
 
                 except ValueError:
-                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
             else:
-                print(colored("Logging out of the Withdrawal menu...", "yellow")) #Back to Main Menu
+                print(colored("Exiting out of the Withdrawal menu...\n", "yellow")) #Back to Main Menu
                 break  
 
 
@@ -106,7 +116,7 @@ class Bank():
     @classmethod
     def logged_customer_deposit(cls, logged_customer , logged_account):
         while True:
-            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!\n", "cyan"))
             selection = cls.menu(cls.deposit_options)
             if selection == cls.deposit_options[0]:  # Deposit into Checking Account
                 print(colored('>>>'+cls.deposit_options[0], 'grey'))
@@ -116,7 +126,7 @@ class Bank():
                     if float(amount):
                         logged_account.deposit('checking', float(amount))
                 except ValueError:
-                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.deposit_options[1]:  # Deposit into Savings Account
@@ -127,11 +137,11 @@ class Bank():
                     if float(amount):
                         logged_account.deposit( 'savings',float(amount))
                 except ValueError:
-                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
 
             else:
-                print(colored("Logging out of the Deposit menu...", "yellow")) #Back to Main Menu
+                print(colored("Exiting out of the Deposit menu...\n", "yellow")) #Back to Main Menu
                 break  
 
 
@@ -139,7 +149,7 @@ class Bank():
     @classmethod 
     def logged_customer_transfer(cls, logged_customer, logged_account):
         while True:
-            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!\n", "cyan"))
             selection = cls.menu(cls.transfer_options)
             if selection == cls.transfer_options[0]:  # Transfer from Checking to Savings
                 print(colored('>>>'+cls.transfer_options[0], 'grey'))
@@ -151,7 +161,7 @@ class Bank():
                     if float(amount):
                         logged_account.transfer(float(amount), 'checking', logged_customer.account_id)
                 except ValueError:
-                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.transfer_options[1]:  # Transfer from Savings to Checking
@@ -164,7 +174,7 @@ class Bank():
                     if float(amount):
                         logged_account.transfer(float(amount), 'savings', logged_customer.account_id)
                 except ValueError:
-                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.transfer_options[2]:  # Transfer from Checking to Another Customer\'s Account
@@ -174,7 +184,7 @@ class Bank():
                 try:
                     id = int(input("Enter the Account ID of the user you want to transfer to: "))
                 except ValueError:
-                    print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric ID. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
                 if int(id):
                     amount = input(f'Enter the Amount you want to Transfer from your Checking account into {id}\'s Account:')
@@ -182,7 +192,7 @@ class Bank():
                         if float(amount):
                             logged_account.transfer(float(amount), 'checking', id)
                     except ValueError:
-                        print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                        print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
 
             elif selection == cls.transfer_options[3]:  # Transfer from Savings to Another Customer\'s Account
@@ -192,7 +202,7 @@ class Bank():
                 try:
                     id = int(input("Enter the Account ID of the user you want to transfer to: "))
                 except ValueError:
-                    print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    print(colored("Please enter a valid numeric ID. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
                 if int(id):
                     amount = input(f'Enter the Amount you want to Transfer from your Savings account into {id}\'s Account:')
@@ -200,12 +210,23 @@ class Bank():
                         if float(amount):
                             logged_account.transfer(float(amount), 'savings', id)
                     except ValueError:
-                        print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                        print(colored("Please enter a valid numeric amount. Only numbers are allowed\n", "cyan", attrs=["dark"]))
 
 
             else:
-                print(colored("Logging out of the Transfer menu...", "yellow")) #Back to Main Menu
+                print(colored("Exiting out of the Transfer menu...\n", "yellow")) #Back to Main Menu
                 break  
+
+
+
+    @classmethod
+    def logged_customer_transactions(cls, logged_customer, logged_account):
+        transactions = get_transactions_by_account_id('transactions', logged_customer.account_id)
+        if transactions:
+            headers = ["Timestamp", "Account ID", "Transaction Type", "Amount", "Balance"]
+            print(tabulate(transactions, headers=headers, tablefmt="grid"))
+        else:
+            print(colored("No transactions found for this account. Try making one!\n", 'light_blue'))
 
 
 
@@ -234,7 +255,7 @@ class Bank():
                     flag = True
 
             except ValueError:
-                print(colored("All fields are required. Please do not leave any field blank", "cyan", attrs=["dark"]))
+                print(colored("All fields are required. Please do not leave any field blank\n", "cyan", attrs=["dark"]))
             if not flag:
                 print('Would you like to go back to the main menu or attempt again?')
                 user_input = cls.menu(['Try Again', 'Back to Main Menu'])
@@ -257,7 +278,7 @@ class Bank():
                 cls.create_new_customer()
             
             elif selection == cls.main_menu_options[1]:
-                print('>>> '+cls.main_menu_options[1])
+                print(colored(f'>>> {cls.main_menu_options[1]}', 'grey'))
                 customer = cls.login()
                 if customer:
                     cls.logged_customer_menu(customer, Account(customer))
