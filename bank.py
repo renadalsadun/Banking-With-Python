@@ -210,6 +210,12 @@ class Bank():
 
 
     @classmethod
+    def create_new_customer():
+        pass
+
+
+    
+    @classmethod
     def start_bank(cls):
 
         print(colored("     Welcome to pyBank! \n", 'light_magenta'))
