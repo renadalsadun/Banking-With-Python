@@ -7,15 +7,17 @@ from account import Account
 
 class Bank():
 
+
     cashier_input = ""
     main_menu_options = ['Add new Customer', 'Login to a Customer Account' , 'Quit']
-    logged_customer_account_options = ['Withdraw Money from Account', 'Deposit Money into Account', 'Transfer Money Between Accounts']
-    withdraw_options = ['Withdraw from Checking Account' ,'Withdraw from Savings Account']
-    deposit_options = ['Deposit into Checking Account','Deposit into Savings Account']
+    logged_customer_account_options = ['Withdraw Money from Account', 'Deposit Money into Account', 'Transfer Money Between Accounts', 'Log Out']
+    withdraw_options = ['Withdraw from Checking Account' ,'Withdraw from Savings Account', 'Back to Main Menu']
+    deposit_options = ['Deposit into Checking Account','Deposit into Savings Account', 'Back to Main Menu']
     transfer_options = ['Transfer from Checking to Savings', 
                         'Transfer from Savings to Checking', 
                         'Transfer from Checking to Another Customer\'s Account ', 
-                        'Transfer from Savings to Another Customer\'s Account']
+                        'Transfer from Savings to Another Customer\'s Account', 
+                        'Back to Main Menu']
     
 
     @classmethod
@@ -25,37 +27,147 @@ class Bank():
         selection = options[selected_index]
         return selection
 
-    # @classmethod
-    # def action_menu(cls,action_dict):
-    #     action = Bank.menu(list(action_dict.keys()))  # Convert keys to list and display as a menu
-    #     selected_action = action_dict.get(action)  # Get the method that corresponds to the selected action
-    #     selected_action()  # Invoke the selected action
-
 
 
     @classmethod
     def login(cls):
-        # selection ='Try Again'
-        # while selection == 'Try Again':
-        #     id = input('Enter Account ID: ')
+        while True:
+            try:
+                id = int(input("Enter Account ID: "))
+                password = input("Enter Password: ")
+                customer = Customer.login(id,password)
 
-        #     try:
-        #         id = int(id)
+                if customer:
+                    return customer 
+                else:
+                    print(colored("Invalid ID or password. Please try again.", "red"))
 
-        #     except ValueError:
-        #         print(colored('Please enter a valid numeric ID. Only numbers are allowed. Try again', 'cyan', attrs=['dark']))
+            except ValueError:
+                print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
 
-        #     if type(id) == int:
-        #         password = get_password(id)
-        #         if password:
-        #             input_password = input('Enter Password: ')
-        #             if input_password == password:
-        #                 customer = Customer.find_customer(id)
-        #         else:
-        #             print('Seems like the account doesnt exists')
-        #     print('What do you want to do?')
-        #     selection = Bank.menu(['Try Again', 'Back to Main Menu'])
 
+
+    @classmethod
+    def logged_customer_menu(cls, logged_customer , logged_account):
+        while True:
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            selection = cls.menu(cls.logged_customer_account_options)
+            if selection == cls.logged_customer_account_options[0]:  # Withdraw Money from Account
+                print(colored('>>>'+cls.logged_customer_account_options[0], 'grey'))
+                cls.logged_customer_withdrawal(logged_customer , logged_account)
+
+            elif selection == cls.logged_customer_account_options[1]:  # Deposit Money into Account
+                print(colored('>>>'+cls.logged_customer_account_options[1], 'grey'))
+                cls.logged_customer_deposit(logged_customer , logged_account)
+
+            elif selection == cls.logged_customer_account_options[2]:  # Transfer Money Between Accounts
+                print(colored('>>>'+cls.logged_customer_account_options[2], 'grey'))
+                cls.logged_customer_transfer(logged_customer , logged_account)
+
+            else:
+                print(colored("Logging out and returning to the main menu...", "yellow")) #log out
+                break  
+
+
+
+    @classmethod
+    def logged_customer_withdrawal(cls, logged_customer , logged_account):
+        while True:
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            selection = cls.menu(cls.withdraw_options)
+            if selection == cls.withdraw_options[0]:  # Withdraw from Checking Account
+                print(colored('>>>'+cls.withdraw_options[0], 'grey'))
+
+                amount = input('Enter the Amount you want to Withdraw from Checking Account:')
+                try:
+                    if float(amount):
+                        logged_account.withdraw_from_checking(float(amount))
+                except ValueError:
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+
+                
+            elif selection == cls.withdraw_options[1]:  # Withdraw from Savings Account
+                print(colored('>>>'+cls.withdraw_options[1], 'grey'))
+                            
+                amount = input('Enter the Amount you want to Withdraw from Savings Account:')
+                try:
+                    if float(amount):
+                        logged_account.withdraw_from_savings(float(amount))
+
+                except ValueError:
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+
+            else:
+                print(colored("Logging out of the Withdrawal menu...", "yellow")) #Back to Main Menu
+                break  
+
+
+
+    @classmethod
+    def logged_customer_deposit(cls, logged_customer , logged_account):
+        while True:
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            selection = cls.menu(cls.deposit_options)
+            if selection == cls.deposit_options[0]:  # Deposit into Checking Account
+                print(colored('>>>'+cls.deposit_options[0], 'grey'))
+                
+                amount = input('Enter the Amount you want to Deposit into Checking Account:')
+                try:
+                    if float(amount):
+                        logged_account.deposit(float(amount), 'checking')
+                except ValueError:
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+
+
+            elif selection == cls.deposit_options[1]:  # Deposit into Savings Account
+                print(colored('>>>'+cls.deposit_options[1], 'grey'))
+                            
+                amount = input('Enter the Amount you want to Deposit into Checking Account:')
+                try:
+                    if float(amount):
+                        logged_account.deposit(float(amount), 'savings')
+                except ValueError:
+                    print(colored("Please enter a valid numeric amount. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+
+
+            else:
+                print(colored("Logging out of the Deposit menu...", "yellow")) #Back to Main Menu
+                break  
+
+
+
+    @classmethod 
+    def logged_customer_transfer(cls, logged_customer, logged_account):
+        while True:
+            print(colored(f"\nWelcome, {logged_customer.first_name} {logged_customer.last_name}!", "green"))
+            selection = cls.menu(cls.transfer_options)
+            if selection == cls.transfer_options[0]:  # Transfer from Checking to Savings
+                print(colored('>>>'+cls.transfer_options[0], 'grey'))
+                
+
+
+
+            elif selection == cls.transfer_options[1]:  # Transfer from Savings to Checking
+                print(colored('>>>'+cls.transfer_options[1], 'grey'))
+            
+
+
+
+            elif selection == cls.transfer_options[2]:  # Transfer from Checking to Another Customer\'s Account
+                print(colored('>>>'+cls.transfer_options[2], 'grey'))
+
+
+
+
+            elif selection == cls.transfer_options[3]:  # Transfer from Savings to Another Customer\'s Account
+                print(colored('>>>'+cls.transfer_options[3], 'grey'))
+                
+
+
+                
+            else:
+                print(colored("Logging out of the Transfer menu...", "yellow")) #Back to Main Menu
+                break  
 
 
 
@@ -64,16 +176,21 @@ class Bank():
 
         print(colored("     Welcome to pyBank! \n", 'light_magenta'))
 
-        selection = ''
-        while cls.cashier_input.lower() != 'quit':
+        while True:
             print(colored('\n------------------ pyBank            \n\n', 'grey', attrs=['bold']))
-            selection = Bank.menu(Bank.main_menu_options)
-            if selection == 'Login to a Customer Account':
-                print('login!')
-                Bank.login()
+            selection = cls.menu(cls.main_menu_options)
+            if selection == cls.main_menu_options[0]:
+                pass
+            
+            elif selection == cls.main_menu_options[1]:
+                print('>>>'+cls.main_menu_options[1])
+                customer = cls.login()
+                if customer:
+                    cls.logged_customer_menu(customer, Account(customer))
 
-            if selection == 'Quit':
-                cls.cashier_input = 'Quit'
+            else :
+                print(colored('It\'s been great having you! \nGoodbye! <3', 'magenta'))
+                break
             # self.cashier_input = input() # input from cashier !
 
 
@@ -84,6 +201,11 @@ class Bank():
             # table = tabulate(data, headers, tablefmt="github")
             # print(table)
             #tablefmt: The table output format such as “plain”, “pipe”, “grid”, or “html”.
+
+
+
+
+
 
 pyBank =  Bank()
 pyBank.start_bank()

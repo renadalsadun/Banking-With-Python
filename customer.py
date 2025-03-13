@@ -78,21 +78,13 @@ class Customer():
 
 
     @classmethod
-    def login(cls):
-        while True:
-            try:
-                id = int(input("Enter Account ID: "))
-                password = input("Enter Password: ")
+    def login(cls, account_id, password):
 
-                customer = cls.find_customer(id)  
+                customer = cls.find_customer(account_id)  
                 if customer and customer.password == password: #if the customer found and the pass is correct
-                    print(colored(f"Welcome, {customer.first_name}!", "green"))
                     return customer  # return the logged in customer
                 else:
-                    print(colored("Invalid ID or password. Please try again.", "red"))
-
-            except ValueError:
-                print(colored("Please enter a valid numeric ID. Only numbers are allowed. Try again.", "cyan", attrs=["dark"]))
+                    return None
 
 
 
