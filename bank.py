@@ -210,8 +210,38 @@ class Bank():
 
 
     @classmethod
-    def create_new_customer():
-        pass
+    def create_new_customer(cls):
+        flag= False
+        user_input = 'Try Again'
+        selection = cls.menu(['Create a Checking Account', 'Create a Savings Account', 'Create Both a Checking and a Savings Account'])
+        while user_input == 'Try Again':
+            try:
+                f_name = (input("Enter First Name: "))
+                l_name = (input("Enter Last Name: "))
+                password = input("Enter Password: ")                    
+
+                if not f_name or not l_name or not password:
+                    raise ValueError
+                else:
+                    if selection == 'Create a Checking Account':
+                        new_customer = Customer.add_new_customer(f_name, l_name, password, 0.0)
+                    elif selection == 'Create a Savings Account':
+                        new_customer = Customer.add_new_customer(f_name, l_name, password, balance_savings = 0.0)
+                    else:
+                        new_customer = Customer.add_new_customer(f_name, l_name, password, 0.0, 0,0)
+                if new_customer :
+                    print(colored(f'Customer added successfully!\nCustomer details: {new_customer}','green', attrs=['reverse']))
+                    flag = True
+
+            except ValueError:
+                print(colored("All fields are required. Please do not leave any field blank", "cyan", attrs=["dark"]))
+            if not flag:
+                print('Would you like to go back to the main menu or attempt again?')
+                user_input = cls.menu(['Try Again', 'Back to Main Menu'])
+                if user_input == 'Back to Main Menu':
+                    break
+            else:
+                break  
 
 
 

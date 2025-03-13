@@ -7,3 +7,6 @@ timestamp;account_id;transaction_type;amount;balance
 2025-03-13 04:17:10;10003;Deposit from checking;50.0;1900.0
 2025-03-13 04:17:50;10003;withdrawal from checking;90.0;1810.0
 2025-03-13 04:17:50;10001;Deposit from checking;90.0;1090.0
+2025-03-13 05:58:31;10006;withdrawal from checking;30.0;-65.0
+2025-03-13 05:59:14;10006;Deposit from checking;1000.0;935.0
+2025-03-13 05:59:59;10006;withdrawal from checking;900.0;0.0
